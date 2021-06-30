@@ -26,7 +26,22 @@ jobs:
         run: |
           cd frontend/
           npm run build
-        
+          
+      - name: Create release-able
+        run: |
+          mkdir release && cd release
+          mkdir backend && cd backend
+          cd ../
+          mkdir frontend && cd frontend
+          mkdir css
+          mkdir js
+          cd ../..
+          cp backend/backend/* release/backend/backend/
+          cp backend/manage.py release/backend/
+          cp backend/requirements.txt release/backend/
+          cp -r frontend/build/ release/frontend/
+          zip -r release.zip release
+          
       - name: Create release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -35,7 +50,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            backend/backend/*
-            backend/manage.py
-            backend/requirements.txt
-            frontend/build/*
+            release.zip
