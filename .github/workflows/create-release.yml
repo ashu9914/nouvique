@@ -33,7 +33,7 @@ jobs:
           mkdir backend && cd backend
           mkdir backend
           cd ../
-          mkdir frontend && cd frontend
+          mkdir frontend
           cd ../
           cp backend/backend/* release/backend/backend/
           cp backend/manage.py release/backend/
