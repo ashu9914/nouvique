@@ -39,6 +39,7 @@ jobs:
           cp backend/manage.py release/backend/
           cp backend/requirements.txt release/backend/
           cp -r frontend/build/ release/frontend/
+          cp run_backend.sh release
           zip -r release.zip release
           
       - name: Create release
