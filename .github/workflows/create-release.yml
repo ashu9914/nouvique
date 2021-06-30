@@ -31,11 +31,10 @@ jobs:
         run: |
           mkdir release && cd release
           mkdir backend && cd backend
+          mkdir backend
           cd ../
           mkdir frontend && cd frontend
-          mkdir css
-          mkdir js
-          cd ../..
+          cd ../
           cp backend/backend/* release/backend/backend/
           cp backend/manage.py release/backend/
           cp backend/requirements.txt release/backend/
