@@ -10,4 +10,6 @@ unzip release.zip
 
 # setup backend + dependencies
 cd release
+cp backend/backend/wsgi.py /var/www/
+mv /var/www/wsgi.py /var/www/questiowo_pythonanywhere_com_wsgi.py
 . run_backend.sh n
