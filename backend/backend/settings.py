@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-6a%59vq(kefdf=2c8^(^*qs95v((cfr_&91*^!wb5)_(dut@q5
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "questiowo.pythonanywhere.com"
+    "questiowo.pythonanywhere.com",
+    "localhost",
 ]
 
 # Application definition

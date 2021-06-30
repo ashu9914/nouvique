@@ -1,7 +1,7 @@
 cd backend
 
-virtualenv --python=$(which python3.8) venv
-. ./venv/bin/activate
+mkvirtualenv --python=$(which python3.8) django-venv
+workon django-venv
 
 pip3 install -r requirements.txt
 
