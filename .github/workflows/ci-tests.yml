@@ -57,4 +57,4 @@ jobs:
     - name: Run Tests
       run: |
         cd frontend/
-        npm test
+        npm test --passWithNoTests
