@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import json
 import os
 
 from pathlib import Path
@@ -21,15 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-if os.path.exists('secrets.json'):
-    with open('secrets.json') as f:
-        lines = f.readlines()
-        SECRET_KEY = lines[0]
+secrets_path = str(BASE_DIR) + '/../secrets.json'
 
-SECRET_KEY = 'dev_key'
+if os.path.exists(secrets_path):
+    f = json.load(open(secrets_path))
+    SECRET_KEY = f['backendSecretKey']
+else:
+    SECRET_KEY = 'dev_key'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
