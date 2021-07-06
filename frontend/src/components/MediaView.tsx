@@ -6,19 +6,23 @@ import { RouteComponentProps } from 'react-router';
 
 import { resolveRESTCall } from '../utils';
 
-import './HomeView.css';
+import './MediaView.css';
 
 interface ApiTest {
   blah: string
 }
 
-interface Props extends RouteComponentProps {}
+interface MatchParams {
+  media_id: string
+}
+
+interface Props extends RouteComponentProps<MatchParams> {}
 
 interface State {
   apiValue: ApiTest
 }
 
-export default class HomeView extends React.Component<Props, State> {
+export default class MediaView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -49,7 +53,7 @@ export default class HomeView extends React.Component<Props, State> {
         <div className='mainbody'>
           <Row>
             <h1>
-              Home
+              Media: {this.props.match.params.media_id}
             </h1>
           </Row>
 

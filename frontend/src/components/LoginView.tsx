@@ -6,7 +6,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { resolveRESTCall } from '../utils';
 
-import './HomeView.css';
+import './LoginView.css';
 
 interface ApiTest {
   blah: string
@@ -18,7 +18,7 @@ interface State {
   apiValue: ApiTest
 }
 
-export default class HomeView extends React.Component<Props, State> {
+export default class LoginView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -49,7 +49,7 @@ export default class HomeView extends React.Component<Props, State> {
         <div className='mainbody'>
           <Row>
             <h1>
-              Home
+              Login
             </h1>
           </Row>
 

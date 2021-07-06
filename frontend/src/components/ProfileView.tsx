@@ -6,21 +6,27 @@ import { RouteComponentProps } from 'react-router';
 
 import { resolveRESTCall } from '../utils';
 
-import './HomeView.css';
+import './ProfileView.css';
 
 interface ApiTest {
   blah: string
 }
 
-interface Props extends RouteComponentProps {}
+interface MatchParams {
+  user_name: string
+}
 
-interface State {
+interface ProfileViewProps extends RouteComponentProps<MatchParams> {}
+
+interface ProfileViewState {
   apiValue: ApiTest
 }
 
-export default class HomeView extends React.Component<Props, State> {
-  constructor(props: Props) {
+export default class ProfileView extends React.Component<ProfileViewProps, ProfileViewState> {
+  constructor(props: ProfileViewProps) {
     super(props);
+
+    console.log(props.match.params.user_name);
 
     this.state = {
       apiValue : {
@@ -49,7 +55,7 @@ export default class HomeView extends React.Component<Props, State> {
         <div className='mainbody'>
           <Row>
             <h1>
-              Home
+              {this.props.match.params.user_name}'s Profile
             </h1>
           </Row>
 
