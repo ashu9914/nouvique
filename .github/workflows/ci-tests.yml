@@ -2,9 +2,9 @@ name: Run CI Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   django:
@@ -57,4 +57,4 @@ jobs:
     - name: Run Tests
       run: |
         cd frontend/
-        npm test --passWithNoTests
+        npm test
