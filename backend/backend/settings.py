@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,13 +22,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6a%59vq(kefdf=2c8^(^*qs95v((cfr_&91*^!wb5)_(dut@q5'
+if os.path.exists('secrets.json'):
+    with open('secrets.json') as f:
+        lines = f.readlines()
+        SECRET_KEY = lines[0]
+
+SECRET_KEY = 'dev_key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "questiowo.pythonanywhere.com",
+    "teleview.pythonanywhere.com",
     "localhost",
 ]
 
