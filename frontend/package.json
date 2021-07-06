@@ -24,7 +24,7 @@
   "scripts": {
     "start": "export REACT_APP_CONFIG=dev || set REACT_APP_CONFIG=dev && react-scripts start",
     "build": "export REACT_APP_CONFIG=prod || set REACT_APP_CONFIG=prod && react-scripts build",
-    "test": "export REACT_APP_CONFIG=dev || set REACT_APP_CONFIG=dev && react-scripts test",
+    "test": "export REACT_APP_CONFIG=dev || set REACT_APP_CONFIG=dev && react-scripts test --passWithNoTests",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

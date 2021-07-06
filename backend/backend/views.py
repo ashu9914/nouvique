@@ -1,9 +1,7 @@
 import json
 
-from django.core import serializers
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
 
 from backend.models import User, Role
 
@@ -30,7 +28,7 @@ def user_handling(request, uuid):
             user = User.objects.get(pk=uuid)
 
             return Response(user.get_object(), status=STATUS_CODE_SUCCESS)
-        except :
+        except Exception :
             return Response({}, status=STATUS_CODE_COULD_NOT_FIND)
 
     elif request.method == 'POST':
@@ -54,17 +52,17 @@ def user_handling(request, uuid):
             # append data to db last as otherwise invalid/incomplete data may be saved
             user.save()
             for r in roles :
-                role.save()
+                r.save()
 
             user = User.objects.get(pk=uuid)
             return Response(user.get_object(), status=STATUS_CODE_SUCCESS)
         
-        except :
+        except Exception :
             try :
                 user = User.objects.get(pk=uuid)
                 return Response(user.get_object(), status=STATUS_CODE_SUCCESS_ISH)
             
-            except :
+            except Exception :
                 return Response({}, status=STATUS_CODE_COULD_NOT_FIND)
 
     elif request.method == 'PUT':
@@ -79,12 +77,12 @@ def user_handling(request, uuid):
             user = User.objects.get(pk=uuid)
             return Response(user.get_object(), status=STATUS_CODE_SUCCESS)
         
-        except :
+        except Exception :
             try :
                 user = User.objects.get(pk=uuid)
                 return Response(user.get_object(), status=STATUS_CODE_SUCCESS_ISH)
             
-            except :
+            except Exception :
                 return Response({}, status=STATUS_CODE_COULD_NOT_FIND)
 
     elif request.method == 'DELETE':
@@ -94,12 +92,12 @@ def user_handling(request, uuid):
 
             return Response({}, status=STATUS_CODE_SUCCESS)
         
-        except :
+        except Exception :
             try:
                 user = User.objects.get(pk=uuid)
                 return Response(user.get_object(), status=STATUS_CODE_COULD_NOT_FIND)
             
-            except:
+            except Exception:
                 return Response({}, status=STATUS_CODE_COULD_NOT_FIND)
 
     else :
