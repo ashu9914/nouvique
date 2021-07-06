@@ -13,3 +13,5 @@ python3 manage.py migrate
 if [[ ! -z "$run" && "$run" == "y" ]]; then
 	python3 manage.py runserver localhost:8000
 fi
+
+cd ..

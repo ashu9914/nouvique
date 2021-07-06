@@ -10,23 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import json
+import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6a%59vq(kefdf=2c8^(^*qs95v((cfr_&91*^!wb5)_(dut@q5'
+secrets_path = str(BASE_DIR) + '/../secrets.json'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+if os.path.exists(secrets_path):
+    f = json.load(open(secrets_path))
+    SECRET_KEY = f['backendSecretKey']
+else:
+    SECRET_KEY = 'dev_key'
+
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "questiowo.pythonanywhere.com",
+    "teleview.pythonanywhere.com",
     "localhost",
 ]
 
