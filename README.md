@@ -1,3 +1,6 @@
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/QuestioWo/test-django-full-stack.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/QuestioWo/test-django-full-stack/context:javascript) 
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/QuestioWo/test-django-full-stack.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/QuestioWo/test-django-full-stack/context:python)
+
 # test-django-full-stack
 Test/placeholder for a full-stack web app using Django and React, created in preperation for the Web-Application Development group project.
 
