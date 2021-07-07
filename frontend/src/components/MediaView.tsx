@@ -6,6 +6,8 @@ import { RouteComponentProps } from 'react-router';
 
 import { resolveRESTCall } from '../utils';
 
+import BasePage from './elements/BasePage';
+
 import './MediaView.css';
 
 interface ApiTest {
@@ -16,7 +18,7 @@ interface MatchParams {
   media_id: string
 }
 
-interface Props extends RouteComponentProps<MatchParams> {}
+interface Props extends RouteComponentProps<MatchParams> { }
 
 interface State {
   apiValue: ApiTest
@@ -27,18 +29,18 @@ export default class MediaView extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      apiValue : {
-        blah : ""
+      apiValue: {
+        blah: ""
       }
     };
   }
 
   async componentDidMount() {
     const result: Result<ApiTest, Error> = await resolveRESTCall<ApiTest>('/');
-    
+
     result
       .map(res => {
-        this.setState({ apiValue : res });
+        this.setState({ apiValue: res });
 
         return null; // necessary to silence warning
       })
@@ -50,7 +52,7 @@ export default class MediaView extends React.Component<Props, State> {
   render() {
     return (
       <React.Fragment>
-        <div className='mainbody'>
+        <BasePage>
           <Row>
             <h1>
               Media: {this.props.match.params.media_id}
@@ -62,7 +64,7 @@ export default class MediaView extends React.Component<Props, State> {
               {this.state.apiValue.blah}
             </div>
           </Row>
-        </div>
+        </BasePage>
       </React.Fragment>
     );
   }

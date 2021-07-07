@@ -6,6 +6,8 @@ import { RouteComponentProps } from 'react-router';
 
 import { resolveRESTCall } from '../utils';
 
+import BasePage from './elements/BasePage';
+
 import './ProfileView.css';
 
 interface ApiTest {
@@ -16,7 +18,7 @@ interface MatchParams {
   user_name: string
 }
 
-interface ProfileViewProps extends RouteComponentProps<MatchParams> {}
+interface ProfileViewProps extends RouteComponentProps<MatchParams> { }
 
 interface ProfileViewState {
   apiValue: ApiTest
@@ -29,18 +31,18 @@ export default class ProfileView extends React.Component<ProfileViewProps, Profi
     console.log(props.match.params.user_name);
 
     this.state = {
-      apiValue : {
-        blah : ""
+      apiValue: {
+        blah: ""
       }
     };
   }
 
   async componentDidMount() {
     const result: Result<ApiTest, Error> = await resolveRESTCall<ApiTest>('/');
-    
+
     result
       .map(res => {
-        this.setState({ apiValue : res });
+        this.setState({ apiValue: res });
 
         return null; // necessary to silence warning
       })
@@ -52,7 +54,7 @@ export default class ProfileView extends React.Component<ProfileViewProps, Profi
   render() {
     return (
       <React.Fragment>
-        <div className='mainbody'>
+        <BasePage>
           <Row>
             <h1>
               {this.props.match.params.user_name}'s Profile
@@ -64,7 +66,7 @@ export default class ProfileView extends React.Component<ProfileViewProps, Profi
               {this.state.apiValue.blah}
             </div>
           </Row>
-        </div>
+        </BasePage>
       </React.Fragment>
     );
   }

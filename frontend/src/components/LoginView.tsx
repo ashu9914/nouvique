@@ -6,13 +6,15 @@ import { RouteComponentProps } from 'react-router';
 
 import { resolveRESTCall } from '../utils';
 
+import BasePage from './elements/BasePage';
+
 import './LoginView.css';
 
 interface ApiTest {
   blah: string
 }
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps { }
 
 interface State {
   apiValue: ApiTest
@@ -23,18 +25,18 @@ export default class LoginView extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      apiValue : {
-        blah : ""
+      apiValue: {
+        blah: ""
       }
     };
   }
 
   async componentDidMount() {
     const result: Result<ApiTest, Error> = await resolveRESTCall<ApiTest>('/');
-    
+
     result
       .map(res => {
-        this.setState({ apiValue : res });
+        this.setState({ apiValue: res });
 
         return null; // necessary to silence warning
       })
@@ -46,7 +48,7 @@ export default class LoginView extends React.Component<Props, State> {
   render() {
     return (
       <React.Fragment>
-        <div className='mainbody'>
+        <BasePage>
           <Row>
             <h1>
               Login
@@ -58,7 +60,7 @@ export default class LoginView extends React.Component<Props, State> {
               {this.state.apiValue.blah}
             </div>
           </Row>
-        </div>
+        </BasePage>
       </React.Fragment>
     );
   }
