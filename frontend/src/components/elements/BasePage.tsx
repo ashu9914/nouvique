@@ -11,9 +11,9 @@ interface Props { }
 interface State { }
 
 export default class BasePage extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-  }
+  // constructor(props: Props) {
+  //   super(props);
+  // }
 
   render() {
     return (
