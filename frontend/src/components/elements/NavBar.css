@@ -1,0 +1,23 @@
+img.nav-bar-logo {
+  height: 1.8rem;
+}
+
+.navbar-brand {
+  padding-left: .3125rem;
+}
+
+a.nav-link {
+  padding-right: 4.5rem !important;
+}
+
+.nav-right-side {
+  padding-right: 4.5rem !important; 
+}
+
+.nav-right-end {
+  padding-right: 0; 
+  text-align: left;
+  width: 8rem;
+  overflow: scroll;
+  white-space: nowrap;
+}

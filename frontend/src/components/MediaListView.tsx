@@ -8,7 +8,7 @@ import { resolveRESTCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
-import './HomeView.css';
+import './MediaListView.css';
 
 interface ApiTest {
   blah: string
@@ -20,7 +20,7 @@ interface State {
   apiValue: ApiTest
 }
 
-export default class HomeView extends React.Component<Props, State> {
+export default class MediaListView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -51,7 +51,7 @@ export default class HomeView extends React.Component<Props, State> {
         <BasePage>
           <Row>
             <h1>
-              Home
+              Media List
             </h1>
           </Row>
 
