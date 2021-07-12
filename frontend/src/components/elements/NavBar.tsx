@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Link, NavLink } from 'react-router-dom';
 import { Nav, Navbar } from 'react-bootstrap';
 
 import './NavBar.css';
@@ -18,14 +19,16 @@ export default class NavBar extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         <Navbar bg='transparent' variant='light'>
-          <Navbar.Brand href='/'>
-            <img
-              alt=''
-              src={process.env.PUBLIC_URL + '/logo192.png'}
-              className='nav-bar-logo d-inline-block align-top'
-            />{' '}
-            TeleView
-          </Navbar.Brand>
+          <LinkContainer to='/'>
+            <Navbar.Brand>
+              <img
+                alt=''
+                src={process.env.PUBLIC_URL + '/logo192.png'}
+                className='nav-bar-logo d-inline-block align-top'
+              />{' '}
+              TeleView
+            </Navbar.Brand>
+          </LinkContainer>
 
           <Navbar.Collapse className='justify-content-end'>
             <Nav className='mr-auto'>
@@ -69,7 +72,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 
               {localStorage.userName && localStorage.userName !== '' ?
                 <Navbar.Text className='nav-right-end'>
-                  Hi, <a href={'/profile/' + localStorage.userName}>{localStorage.userName}</a>
+                  Hi, <Link to={{ pathname: '/profile/' + localStorage.userName }}>{localStorage.userName}</Link>
                 </Navbar.Text>
                 :
                 <Nav.Item>
@@ -78,7 +81,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
                     activeClassName='nav-link active'
                     to={{ pathname: '/login' }}>
                     Login/Signup
-                </NavLink>
+                  </NavLink>
                 </Nav.Item>
               }
             </Nav>

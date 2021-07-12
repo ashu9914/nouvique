@@ -28,7 +28,7 @@ export default class ProfileView extends React.Component<ProfileViewProps, Profi
   constructor(props: ProfileViewProps) {
     super(props);
 
-    console.log(props.match.params.user_name);
+    // console.log(props.match.params.user_name);
 
     this.state = {
       apiValue: {
