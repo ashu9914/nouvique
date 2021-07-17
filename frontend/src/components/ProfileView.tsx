@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FaCheck, FaSpinner } from 'react-icons/fa';
+import { FaCheck, FaTimes, FaSpinner } from 'react-icons/fa';
 import { Result } from 'neverthrow';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
@@ -20,7 +20,8 @@ interface Props extends RouteComponentProps<MatchParams>, PageProps { }
 interface State {
 	user: UserREST,
 	form: UserREST,
-	isUser: boolean
+	isUser: boolean,
+	submit_error: boolean
 }
 
 export default class ProfileView extends React.Component<Props, State> {
@@ -38,6 +39,7 @@ export default class ProfileView extends React.Component<Props, State> {
 				last_name: "",
 				email: ""
 			},
+			submit_error: false,
 			isUser: localStorage.getItem("username") === this.props.match.params.username
 		};
 	}
@@ -64,17 +66,14 @@ export default class ProfileView extends React.Component<Props, State> {
 
 		result
 			.map(res => {
-				// TODO: replace with inline submition icon
-				// this.props.updateAlertBar("Successfully logged in!", "success", true);
-
-				// this.props.history.push('/profile/' + res.username);
-
 				this.setState({ user: Object.assign({}, res), form: Object.assign({}, res) });
 
 				return null; // necessary to silence warning
 			})
 			.mapErr(err => {
 				const message: string = "Could not complete request, please try logging out and back in";
+
+				this.setState({ submit_error: true });
 
 				this.props.updateAlertBar(message, "danger", true);
 			});
@@ -85,9 +84,19 @@ export default class ProfileView extends React.Component<Props, State> {
 		this.handleChangeSubmit();
 	}
 
-	handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const id: string = event.target.id;
+		var index: "email" | "first_name" | "last_name";
+		if (id === "email") {
+			index = "email";
+		} else if (id === "first_name") {
+			index = "first_name";
+		} else { // id === last_name
+			index = "last_name";
+		}
+
 		const cp: UserREST = this.state.form;
-		cp.email = event.target.value;
+		cp[index] = event.target.value;
 		this.setState({ form: cp });
 		this.handleChangeSubmit();
 	}
@@ -102,6 +111,30 @@ export default class ProfileView extends React.Component<Props, State> {
 		localStorage.setItem("tokens", JSON.stringify(tokens));
 
 		window.location.reload();
+	}
+
+	getFormVariant = (field: "email" | "first_name" | "last_name"): string => {
+		if (this.state.form[field] === this.state.user[field]) {
+			return "outline-success";
+		} else {
+			if (this.state.submit_error) {
+				return "outline-danger";
+			} else {
+				return "outline-warning";
+			}
+		}
+	}
+
+	getFormIcon = (field: "email" | "first_name" | "last_name"): JSX.Element => {
+		if (this.state.form[field] === this.state.user[field]) {
+			return <FaCheck />;
+		} else {
+			if (this.state.submit_error) {
+				return <FaTimes />;
+			} else {
+				return <FaSpinner className="spinner" />;
+			}
+		}
 	}
 
 	render() {
@@ -133,18 +166,15 @@ export default class ProfileView extends React.Component<Props, State> {
 						{this.state.isUser ?
 							<Form onSubmit={this.handleChangeSubmit}>
 								<Form.Label>Email</Form.Label>
-								<InputGroup className="mb-3" id="email">
+								<InputGroup className="mb-3">
 									<Form.Control
 										required
+										id="email"
 										type="text"
 										value={this.state.form.email}
-										onChange={this.handleEmailChange} />
-									<Button variant={this.state.form.email === this.state.user.email ? "outline-success" : "outline-warning"} disabled>
-										{this.state.form.email === this.state.user.email ?
-											<FaCheck />
-											:
-											<FaSpinner className="spinner" />
-										}
+										onChange={this.handleFormChange} />
+									<Button variant={this.getFormVariant("email")} disabled>
+										{this.getFormIcon("email")}
 									</Button>
 								</InputGroup>
 							</Form>

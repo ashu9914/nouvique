@@ -55,7 +55,46 @@ export interface UserRESTSubmit {
 	email: string
 }
 
-export async function resolveGETCall<MessageT>(address: string, authentication: boolean = false): Promise<Result<MessageT, Error>> {
+interface RefreshTokensRESTSubmit {
+	refresh: string
+}
+
+interface RefreshTokensREST {
+	access: string
+}
+
+async function getNewAccessToken(): Promise<boolean> {
+	try {
+		const tokens: Tokens = JSON.parse(localStorage.tokens);
+
+		if (tokens.refresh !== "") {
+			const data: RefreshTokensRESTSubmit = {
+				refresh: tokens.refresh
+			};
+
+			const result: Result<RefreshTokensREST, Error> = await resolvePOSTCall<RefreshTokensREST, RefreshTokensRESTSubmit>('/auth/refresh_tokens/', data);
+
+			result
+				.map(res => {
+					tokens.access = res.access;
+					localStorage.setItem("tokens", JSON.stringify(tokens));
+
+					return null; // necessary to silence warning
+				})
+				.mapErr(err => {
+					console.error(err);
+				});
+
+			return true;
+		}
+
+		return false;
+	} catch (error) {
+		return false;
+	}
+}
+
+export async function resolveGETCall<MessageT>(address: string, authentication: boolean = false, recursiveCall: boolean = false): Promise<Result<MessageT, Error>> {
 	try {
 		var res: AxiosResponse<MessageT>;
 
@@ -69,11 +108,20 @@ export async function resolveGETCall<MessageT>(address: string, authentication: 
 
 		return ok(res.data);
 	} catch (error) {
+		if (recursiveCall)
+			return err(error);
+
+		const successfullyGotNewAccess: boolean = await getNewAccessToken();
+
+		if (successfullyGotNewAccess) {
+			return await resolveGETCall<MessageT>(address, authentication, true);
+		}
+
 		return err(error);
 	}
 }
 
-export async function resolvePOSTCall<MessageT, PayloadT>(address: string, data: PayloadT, authentication: boolean = false): Promise<Result<MessageT, Error>> {
+export async function resolvePOSTCall<MessageT, PayloadT>(address: string, data: PayloadT, authentication: boolean = false, recursiveCall: boolean = false): Promise<Result<MessageT, Error>> {
 	try {
 		var res: AxiosResponse<MessageT>;
 
@@ -87,11 +135,20 @@ export async function resolvePOSTCall<MessageT, PayloadT>(address: string, data:
 
 		return ok(res.data);
 	} catch (error) {
+		if (recursiveCall)
+			return err(error);
+
+		const successfullyGotNewAccess: boolean = await getNewAccessToken();
+
+		if (successfullyGotNewAccess) {
+			return await resolvePOSTCall<MessageT, PayloadT>(address, data, authentication, true);
+		}
+
 		return err(error);
 	}
 }
 
-export async function resolvePUTCall<MessageT, PayloadT>(address: string, data: PayloadT, authentication: boolean = false): Promise<Result<MessageT, Error>> {
+export async function resolvePUTCall<MessageT, PayloadT>(address: string, data: PayloadT, authentication: boolean = false, recursiveCall: boolean = false): Promise<Result<MessageT, Error>> {
 	try {
 		var res: AxiosResponse<MessageT>;
 
@@ -105,11 +162,20 @@ export async function resolvePUTCall<MessageT, PayloadT>(address: string, data: 
 
 		return ok(res.data);
 	} catch (error) {
+		if (recursiveCall)
+			return err(error);
+
+		const successfullyGotNewAccess: boolean = await getNewAccessToken();
+
+		if (successfullyGotNewAccess) {
+			return await resolvePUTCall<MessageT, PayloadT>(address, data, authentication, true);
+		}
+
 		return err(error);
 	}
 }
 
-export async function resolveDELETECall<MessageT>(address: string, authentication: boolean = false): Promise<Result<MessageT, Error>> {
+export async function resolveDELETECall<MessageT>(address: string, authentication: boolean = false, recursiveCall: boolean = false): Promise<Result<MessageT, Error>> {
 	try {
 		var res: AxiosResponse<MessageT>;
 
@@ -123,6 +189,15 @@ export async function resolveDELETECall<MessageT>(address: string, authenticatio
 
 		return ok(res.data);
 	} catch (error) {
+		if (recursiveCall)
+			return err(error);
+
+		const successfullyGotNewAccess: boolean = await getNewAccessToken();
+
+		if (successfullyGotNewAccess) {
+			return await resolveDELETECall<MessageT>(address, authentication, true);
+		}
+
 		return err(error);
 	}
 }
