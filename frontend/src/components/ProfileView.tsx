@@ -169,8 +169,8 @@ export default class ProfileView extends React.Component<Props, State> {
 								<InputGroup className="mb-3">
 									<Form.Control
 										required
-										id="email"
 										type="text"
+										id="email"
 										value={this.state.form.email}
 										onChange={this.handleFormChange} />
 									<Button variant={this.getFormVariant("email")} disabled>
@@ -184,6 +184,43 @@ export default class ProfileView extends React.Component<Props, State> {
 							</div>
 						}
 					</Row>
+
+					{this.state.isUser &&
+						<React.Fragment>
+							<Row>
+								<Form onSubmit={this.handleChangeSubmit}>
+									<Form.Label>First Name</Form.Label>
+									<InputGroup className="mb-3">
+										<Form.Control
+											required
+											type="text"
+											id="first_name"
+											value={this.state.form.first_name}
+											onChange={this.handleFormChange} />
+										<Button variant={this.getFormVariant("first_name")} disabled>
+											{this.getFormIcon("first_name")}
+										</Button>
+									</InputGroup>
+								</Form>
+							</Row>
+							<Row>
+								<Form onSubmit={this.handleChangeSubmit}>
+									<Form.Label>Last Name</Form.Label>
+									<InputGroup className="mb-3">
+										<Form.Control
+											required
+											type="text"
+											id="last_name"
+											value={this.state.form.last_name}
+											onChange={this.handleFormChange} />
+										<Button variant={this.getFormVariant("last_name")} disabled>
+											{this.getFormIcon("last_name")}
+										</Button>
+									</InputGroup>
+								</Form>
+							</Row>
+						</React.Fragment>
+					}
 				</BasePage>
 			</React.Fragment >
 		);
