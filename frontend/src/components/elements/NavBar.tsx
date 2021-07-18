@@ -52,7 +52,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 							</Nav.Item>
 
 							<Nav.Item>
-								{localStorage.getItem("username") !== '' ?
+								{(localStorage.getItem("username") && localStorage.getItem("username") !== '') ?
 									<NavLink
 										className='nav-link nav-right-side'
 										activeClassName='nav-link active nav-right-side'
@@ -70,7 +70,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 								}
 							</Nav.Item>
 
-							{localStorage.getItem("username") !== '' ?
+							{(localStorage.getItem("username") && localStorage.getItem("username") !== '') ?
 								<Navbar.Text className='nav-right-end'>
 									Hi, <Link to={{ pathname: '/profile/' + localStorage.getItem("username") }}>{localStorage.getItem("username")}</Link>
 								</Navbar.Text>
