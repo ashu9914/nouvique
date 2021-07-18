@@ -7,7 +7,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from backend.models import User
-from backend.utils import *
+from backend.utils import (
+	get_public_user_object,
+	STATUS_CODE_4xx,
+	STATUS_CODE_2xx
+)
 
 
 ROLE_NAME_TO_CODE = {
@@ -25,7 +29,7 @@ class RegisterView(APIView):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
 
-			user = User.objects.create_user(req['username'], req['email'], req['password'], first_name=req['first_name'], last_name=req['last_name'])
+			User.objects.create_user(req['username'], req['email'], req['password'], first_name=req['first_name'], last_name=req['last_name'])
 			
 			ret_user = User.objects.get(username=req['username'])
 			
@@ -37,7 +41,7 @@ class RegisterView(APIView):
 			}, status=STATUS_CODE_2xx.CREATED.value)
 		
 		except Exception :
-			print(traceback.print_exc())
+			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class LoginView(APIView):
@@ -51,14 +55,14 @@ class LoginView(APIView):
 				tokens = get_tokens_for_user(user)
 				return Response({
 					"tokens" : tokens,
-					"username" : req['username']
+					"username" : user.username
 				}, status=STATUS_CODE_2xx.ACCEPTED.value)
 
 			else :
 				return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 		except Exception :
-			print(traceback.print_exc())
+			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
 
 class UserGetView(APIView):
@@ -68,7 +72,7 @@ class UserGetView(APIView):
 
 			return Response(get_public_user_object(user), status=STATUS_CODE_2xx.SUCCESS.value)
 		except Exception :
-			print(traceback.print_exc())
+			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class UserChangeView(APIView):
@@ -89,7 +93,7 @@ class UserChangeView(APIView):
 			return Response(get_public_user_object(user), status=STATUS_CODE_2xx.ACCEPTED.value)
 		
 		except Exception :
-			print(traceback.print_exc())
+			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 	def delete(self, request, username):
@@ -100,7 +104,7 @@ class UserChangeView(APIView):
 			return Response({}, status=STATUS_CODE_2xx.NO_CONTENT.value)
 		
 		except Exception :
-			print(traceback.print_exc())
+			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class UserListView(APIView):

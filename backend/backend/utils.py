@@ -28,10 +28,3 @@ def get_public_user_object(user) :
 		"first_name" : user.first_name,
 		"last_name" : user.last_name,
 	}
-
-def get_public_role_object(role) :
-	return {
-		"role_name":role.role_name, 
-		"user_name": role.user.username, 
-		"role_id":role.role_id
-	}
