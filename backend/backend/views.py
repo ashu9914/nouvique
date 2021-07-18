@@ -2,12 +2,11 @@ import json
 import traceback
 
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from backend.models import Role
+from backend.models import User
 from backend.utils import *
 
 
@@ -113,11 +112,11 @@ class UserListView(APIView):
 
 		return Response(users, status=STATUS_CODE_2xx.SUCCESS.value)
 
-class RolesListView(APIView):
-	def get(self, request):
-		l = Role.objects.all()
-		roles = []
-		for r in l:
-			roles.append(get_public_role_object(r))
+# class RolesListView(APIView):
+# 	def get(self, request):
+# 		l = Role.objects.all()
+# 		roles = []
+# 		for r in l:
+# 			roles.append(get_public_role_object(r))
 
-		return Response(roles, status=STATUS_CODE_2xx.SUCCESS.value)
+# 		return Response(roles, status=STATUS_CODE_2xx.SUCCESS.value)
