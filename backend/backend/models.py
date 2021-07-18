@@ -1,34 +1,15 @@
-import uuid
-
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import ugettext_lazy as _
+from datetime import date
 
-class User(models.Model):
-	user_name = models.CharField(max_length=200)
-	uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
+class User(AbstractUser):
+	username = models.CharField(max_length=50, unique=True, primary_key=True)
+	email = models.EmailField(_('email address'))
+	# email = models.EmailField(_('email address'), unique=True)
 
+	USERNAME_FIELD = 'username'
+	REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password']
+	
 	def __str__(self):
-		return self.user_name
-
-	def get_object(self):
-		return {
-			"user_name":self.user_name, 
-			"uuid":self.uuid
-		}
-
-
-class Role(models.Model):
-	role_name = models.CharField(max_length=200)
-	user_uuid = models.UUIDField(primary_key=False, unique=False, default=uuid.uuid4, editable=False)
-	role_id = models.IntegerField()
-	uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
-
-	def __str__(self):
-		return self.role_name
-
-	def get_object(self) :
-		return {
-			"role_name":self.role_name, 
-			"user_uuid": self.user_uuid, 
-			"role_id":self.role_id, 
-			"uuid": self.uuid
-		}
+		return "{}".format(self.email)

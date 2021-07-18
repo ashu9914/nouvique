@@ -4,64 +4,69 @@ import { Result } from 'neverthrow';
 import { Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { resolveRESTCall } from '../utils';
+import { PageProps, resolveGETCall } from '../utils';
 
 import BasePage from './elements/BasePage';
+import LoginForm from './elements/CredentialForm';
 
 import './LoginView.css';
 
 interface ApiTest {
-  blah: string
+	blah: string
 }
 
-interface Props extends RouteComponentProps { }
+interface Props extends RouteComponentProps, PageProps { }
 
 interface State {
-  apiValue: ApiTest
+	apiValue: ApiTest
 }
 
 export default class LoginView extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    this.state = {
-      apiValue: {
-        blah: ""
-      }
-    };
-  }
+		this.state = {
+			apiValue: {
+				blah: ""
+			}
+		};
+	}
 
-  async componentDidMount() {
-    const result: Result<ApiTest, Error> = await resolveRESTCall<ApiTest>('/');
+	async componentDidMount() {
+		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>('/');
 
-    result
-      .map(res => {
-        this.setState({ apiValue: res });
+		result
+			.map(res => {
+				this.setState({ apiValue: res });
 
-        return null; // necessary to silence warning
-      })
-      .mapErr(err => {
-        console.error(err);
-      });
-  }
+				return null; // necessary to silence warning
+			})
+			.mapErr(err => {
+				console.error(err);
+			});
+	}
 
-  render() {
-    return (
-      <React.Fragment>
-        <BasePage>
-          <Row>
-            <h1>
-              Login
+	render() {
+		return (
+			<React.Fragment>
+				<BasePage {...this.props}>
+					<Row>
+						<h1>
+							Login
             </h1>
-          </Row>
+					</Row>
 
-          <Row>
-            <div>
-              {this.state.apiValue.blah}
-            </div>
-          </Row>
-        </BasePage>
-      </React.Fragment>
-    );
-  }
+					<Row>
+						<div>
+							{this.state.apiValue.blah}
+						</div>
+					</Row>
+
+					<Row>
+						<LoginForm {...this.props} />
+					</Row>
+				</BasePage>
+			</React.Fragment>
+		);
+	}
 }

@@ -1,73 +1,228 @@
 import React from 'react';
 
+import { FaCheck, FaTimes, FaSpinner } from 'react-icons/fa';
 import { Result } from 'neverthrow';
-import { Row } from 'react-bootstrap';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { resolveRESTCall } from '../utils';
+import { UserRESTSubmit, UserREST, Tokens, PageProps, resolveGETCall, resolvePUTCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
 import './ProfileView.css';
 
-interface ApiTest {
-  blah: string
-}
-
 interface MatchParams {
-  user_name: string
+	username: string
 }
 
-interface ProfileViewProps extends RouteComponentProps<MatchParams> { }
+interface Props extends RouteComponentProps<MatchParams>, PageProps { }
 
-interface ProfileViewState {
-  apiValue: ApiTest
+interface State {
+	user: UserREST,
+	form: UserREST,
+	isUser: boolean,
+	submit_error: boolean
 }
 
-export default class ProfileView extends React.Component<ProfileViewProps, ProfileViewState> {
-  constructor(props: ProfileViewProps) {
-    super(props);
+export default class ProfileView extends React.Component<Props, State> {
+	constructor(props: Props) {
+		super(props);
 
-    // console.log(props.match.params.user_name);
+		this.state = {
+			user: {
+				first_name: "",
+				last_name: "",
+				email: ""
+			},
+			form: {
+				first_name: "",
+				last_name: "",
+				email: ""
+			},
+			submit_error: false,
+			isUser: localStorage.getItem("username") === this.props.match.params.username
+		};
+	}
 
-    this.state = {
-      apiValue: {
-        blah: ""
-      }
-    };
-  }
+	async componentDidMount() {
+		const path: string = '/getuser/' + this.props.match.params.username + '/';
+		const result: Result<UserREST, Error> = await resolveGETCall<UserREST>(path);
 
-  async componentDidMount() {
-    const result: Result<ApiTest, Error> = await resolveRESTCall<ApiTest>('/');
+		result
+			.map(res => {
+				this.setState({ user: Object.assign({}, res), form: Object.assign({}, res) });
 
-    result
-      .map(res => {
-        this.setState({ apiValue: res });
+				return null; // necessary to silence warning
+			})
+			.mapErr(err => {
+				console.error(err);
+			});
+	}
 
-        return null; // necessary to silence warning
-      })
-      .mapErr(err => {
-        console.error(err);
-      });
-  }
+	handleChangeSubmit = async () => {
+		const path = '/user/' + this.props.match.params.username + '/';
 
-  render() {
-    return (
-      <React.Fragment>
-        <BasePage>
-          <Row>
-            <h1>
-              {this.props.match.params.user_name}'s Profile
-            </h1>
-          </Row>
+		const result: Result<UserREST, Error> = await resolvePUTCall<UserREST, UserRESTSubmit>(path, this.state.form, true);
 
-          <Row>
-            <div>
-              {this.state.apiValue.blah}
-            </div>
-          </Row>
-        </BasePage>
-      </React.Fragment>
-    );
-  }
+		result
+			.map(res => {
+				this.setState({ user: Object.assign({}, res), form: Object.assign({}, res) });
+
+				return null; // necessary to silence warning
+			})
+			.mapErr(err => {
+				const message: string = "Could not complete request, please try logging out and back in";
+
+				this.setState({ submit_error: true });
+
+				this.props.updateAlertBar(message, "danger", true);
+			});
+	}
+
+	handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		this.handleChangeSubmit();
+	}
+
+	handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const id: string = event.target.id;
+		var index: "email" | "first_name" | "last_name";
+		if (id === "email") {
+			index = "email";
+		} else if (id === "first_name") {
+			index = "first_name";
+		} else { // id === last_name
+			index = "last_name";
+		}
+
+		const cp: UserREST = this.state.form;
+		cp[index] = event.target.value;
+		this.setState({ form: cp });
+		this.handleChangeSubmit();
+	}
+
+	handleLogOut = async () => {
+		localStorage.setItem("username", "");
+
+		const tokens: Tokens = {
+			"access": "",
+			"refresh": ""
+		};
+		localStorage.setItem("tokens", JSON.stringify(tokens));
+
+		window.location.reload();
+	}
+
+	getFormVariant = (field: "email" | "first_name" | "last_name"): string => {
+		if (this.state.form[field] === this.state.user[field]) {
+			return "outline-success";
+		} else {
+			if (this.state.submit_error) {
+				return "outline-danger";
+			} else {
+				return "outline-warning";
+			}
+		}
+	}
+
+	getFormIcon = (field: "email" | "first_name" | "last_name"): JSX.Element => {
+		if (this.state.form[field] === this.state.user[field]) {
+			return <FaCheck />;
+		} else {
+			if (this.state.submit_error) {
+				return <FaTimes />;
+			} else {
+				return <FaSpinner className="spinner" />;
+			}
+		}
+	}
+
+	render() {
+		return (
+			<React.Fragment>
+				<BasePage {...this.props}>
+					<Row>
+						<Col>
+							<h1>
+								{this.state.user.first_name} {this.state.user.last_name}'s Profile
+							</h1>
+						</Col>
+						{this.state.isUser &&
+							<Col>
+								<Button onClick={this.handleLogOut} variant='outline-danger' style={{ float: "right" }}>
+									Log out
+								</Button>
+							</Col>
+						}
+					</Row>
+
+					<Row>
+						<div>
+							@{this.props.match.params.username}
+						</div>
+					</Row>
+
+					<Row>
+						{this.state.isUser ?
+							<Form onSubmit={this.handleChangeSubmit}>
+								<Form.Label>Email</Form.Label>
+								<InputGroup className="mb-3">
+									<Form.Control
+										required
+										type="text"
+										id="email"
+										value={this.state.form.email}
+										onChange={this.handleFormChange} />
+									<Button variant={this.getFormVariant("email")} disabled>
+										{this.getFormIcon("email")}
+									</Button>
+								</InputGroup>
+							</Form>
+							:
+							<div>
+								{this.state.user.email}
+							</div>
+						}
+					</Row>
+
+					{this.state.isUser &&
+						<React.Fragment>
+							<Row>
+								<Form onSubmit={this.handleChangeSubmit}>
+									<Form.Label>First Name</Form.Label>
+									<InputGroup className="mb-3">
+										<Form.Control
+											required
+											type="text"
+											id="first_name"
+											value={this.state.form.first_name}
+											onChange={this.handleFormChange} />
+										<Button variant={this.getFormVariant("first_name")} disabled>
+											{this.getFormIcon("first_name")}
+										</Button>
+									</InputGroup>
+								</Form>
+							</Row>
+							<Row>
+								<Form onSubmit={this.handleChangeSubmit}>
+									<Form.Label>Last Name</Form.Label>
+									<InputGroup className="mb-3">
+										<Form.Control
+											required
+											type="text"
+											id="last_name"
+											value={this.state.form.last_name}
+											onChange={this.handleFormChange} />
+										<Button variant={this.getFormVariant("last_name")} disabled>
+											{this.getFormIcon("last_name")}
+										</Button>
+									</InputGroup>
+								</Form>
+							</Row>
+						</React.Fragment>
+					}
+				</BasePage>
+			</React.Fragment >
+		);
+	}
 }
