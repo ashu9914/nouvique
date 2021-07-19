@@ -63,8 +63,8 @@ export default class App extends React.Component<Props, State> {
 						<Route exact path="/" render={(props) => <HomeView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
 						<Route exact path="/login" render={(props) => <LoginView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
 						<Route exact path="/media/" render={(props) => <MediaListView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
-						<Route exact path="/media/:media_id" render={(props) => <MediaView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
-						<Route exact path="/profile/:username" render={(props) => <ProfileView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
+						<Route path="/media/:media_id" render={(props) => <MediaView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
+						<Route path="/profile/:username" render={(props) => <ProfileView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
 					</Switch>
 				</BrowserRouter>
 			</React.Fragment>
