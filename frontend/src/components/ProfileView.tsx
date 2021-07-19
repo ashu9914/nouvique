@@ -110,7 +110,7 @@ export default class ProfileView extends React.Component<Props, State> {
 		};
 		localStorage.setItem("tokens", JSON.stringify(tokens));
 
-		window.location.reload();
+		this.props.history.go(0);
 	}
 
 	getFormVariant = (field: "email" | "first_name" | "last_name"): string => {
@@ -151,7 +151,7 @@ export default class ProfileView extends React.Component<Props, State> {
 							<Col>
 								<Button onClick={this.handleLogOut} variant='outline-danger' style={{ float: "right" }}>
 									Log out
-								</Button>
+									</Button>
 							</Col>
 						}
 					</Row>
@@ -164,7 +164,7 @@ export default class ProfileView extends React.Component<Props, State> {
 
 					<Row>
 						{this.state.isUser ?
-							<Form onSubmit={this.handleChangeSubmit}>
+							<Form onSubmit={this.handleFormSubmit}>
 								<Form.Label>Email</Form.Label>
 								<InputGroup className="mb-3">
 									<Form.Control
@@ -188,7 +188,7 @@ export default class ProfileView extends React.Component<Props, State> {
 					{this.state.isUser &&
 						<React.Fragment>
 							<Row>
-								<Form onSubmit={this.handleChangeSubmit}>
+								<Form onSubmit={this.handleFormSubmit}>
 									<Form.Label>First Name</Form.Label>
 									<InputGroup className="mb-3">
 										<Form.Control
@@ -204,7 +204,7 @@ export default class ProfileView extends React.Component<Props, State> {
 								</Form>
 							</Row>
 							<Row>
-								<Form onSubmit={this.handleChangeSubmit}>
+								<Form onSubmit={this.handleFormSubmit}>
 									<Form.Label>Last Name</Form.Label>
 									<InputGroup className="mb-3">
 										<Form.Control
