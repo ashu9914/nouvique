@@ -40,6 +40,6 @@ jobs:
           cp backend/backend/* release/backend/
           cp backend/manage.py release/
           cp backend/requirements.txt release/
-          cp backend/build/* release/build/
+          cp -r backend/build/* release/build/
           cp run_backend.sh release
           zip -r release.zip release
