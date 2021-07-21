@@ -2,11 +2,11 @@ on:
   push:
     branches: [ main ]
 
-name: Build and Create Release
+name: Test Create Release
 
 jobs:
   build:
-    name: Build and Create Release
+    name: Create Release .zip
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -28,7 +28,7 @@ jobs:
           cd frontend/
           npm run build 
           
-      - name: Create release-able
+      - name: Create release.zip
         run: |
           mkdir release && cd release
           mkdir backend && cd backend
