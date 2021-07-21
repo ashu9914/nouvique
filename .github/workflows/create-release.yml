@@ -23,9 +23,10 @@ jobs:
           npm install
         
       - name: Build frontend/
+        # should copy the build/ directory to backend so that the static usr stuff works fine
         run: |
           cd frontend/
-          npm run build
+          npm run build 
           
       - name: Create release-able
         run: |
@@ -35,11 +36,11 @@ jobs:
           cd ../
           mkdir frontend
           cd ../
-          sed -i 's/DEBUG = True/DEBUG = False/I' backend/backend/settings.py
-          cp backend/backend/* release/backend/backend/
-          cp backend/manage.py release/backend/
-          cp backend/requirements.txt release/backend/
-          cp -r frontend/build/* release/frontend/
+          sed -i 's/DEBUG = True/DEBUG = False/I' backend/settings.py
+          cp backend/backend/* release/backend/
+          cp backend/manage.py release/
+          cp backend/requirements.txt release/
+          cp backend/build/* release/build/
           cp run_backend.sh release
           zip -r release.zip release
           

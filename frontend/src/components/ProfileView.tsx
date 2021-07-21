@@ -151,7 +151,7 @@ export default class ProfileView extends React.Component<Props, State> {
 							<Col>
 								<Button onClick={this.handleLogOut} variant='outline-danger' style={{ float: "right" }}>
 									Log out
-									</Button>
+								</Button>
 							</Col>
 						}
 					</Row>

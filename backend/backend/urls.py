@@ -22,6 +22,8 @@ NAMESPACE = 'api'
 
 # str, int, slug, uuid, path variables
 urlpatterns = [
+	path('', views.IndexView.as_view()),
+
 	path(NAMESPACE + '/admin/', admin.site.urls),
 
 	path(NAMESPACE + '/', views.TestView.as_view()),
@@ -33,4 +35,4 @@ urlpatterns = [
 	path(NAMESPACE + '/getuser/<str:username>/', views.UserGetView.as_view()),
 	path(NAMESPACE + '/user/<str:username>/', views.UserChangeView.as_view()),
 	path(NAMESPACE + '/users/', views.UserListView.as_view())
-]
+] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
 import HomeView from './components/HomeView';
 import LoginView from './components/LoginView';
@@ -58,7 +58,7 @@ export default class App extends React.Component<Props, State> {
 	render() {
 		return (
 			<React.Fragment>
-				<BrowserRouter>
+				<Router>
 					<Switch>
 						<Route exact path="/" render={(props) => <HomeView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
 						<Route exact path="/login" render={(props) => <LoginView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
@@ -66,7 +66,7 @@ export default class App extends React.Component<Props, State> {
 						<Route path="/media/:media_id" render={(props) => <MediaView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
 						<Route path="/profile/:username" render={(props) => <ProfileView {...props} {...this.state} updateAlertBar={this.updateAlertBar} />} />
 					</Switch>
-				</BrowserRouter>
+				</Router>
 			</React.Fragment>
 		);
 	}
