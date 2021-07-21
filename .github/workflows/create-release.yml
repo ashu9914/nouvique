@@ -36,7 +36,7 @@ jobs:
           cd ../
           mkdir frontend
           cd ../
-          sed -i 's/DEBUG = True/DEBUG = False/I' backend/settings.py
+          sed -i 's/DEBUG = True/DEBUG = False/I' backend/backend/settings.py
           cp backend/backend/* release/backend/
           cp backend/manage.py release/
           cp backend/requirements.txt release/
