@@ -1,0 +1,45 @@
+on:
+  push:
+    branches: [ main ]
+
+name: Build and Create Release
+
+jobs:
+  build:
+    name: Build and Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Install packages
+        run: |
+          cd frontend/
+          npm install
+        
+      - name: Build frontend/
+        # should copy the build/ directory to backend so that the static usr stuff works fine
+        run: |
+          cd frontend/
+          npm run build 
+          
+      - name: Create release-able
+        run: |
+          mkdir release && cd release
+          mkdir backend && cd backend
+          mkdir backend
+          cd ../
+          mkdir build
+          cd ../
+          sed -i 's/DEBUG = True/DEBUG = False/I' backend/backend/settings.py
+          cp backend/backend/* release/backend/
+          cp backend/manage.py release/
+          cp backend/requirements.txt release/
+          cp backend/build/* release/build/
+          cp run_backend.sh release
+          zip -r release.zip release
