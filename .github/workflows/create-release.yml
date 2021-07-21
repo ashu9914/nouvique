@@ -33,8 +33,9 @@ jobs:
           mkdir release && cd release
           mkdir backend && cd backend
           mkdir backend
+          cd ../
           mkdir build
-          cd ../../
+          cd ../
           sed -i 's/DEBUG = True/DEBUG = False/I' backend/backend/settings.py
           cp backend/backend/* release/backend/
           cp backend/manage.py release/
