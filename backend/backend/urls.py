@@ -13,15 +13,19 @@ Including another URLconf
 	1. Import the include() function: from django.urls import include, path
 	2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from . import views
+from . import settings
 from rest_framework_simplejwt.views import TokenRefreshView
 
 NAMESPACE = 'api'
 
 # str, int, slug, uuid, path variables
 urlpatterns = [
+	path('', views.IndexView.as_view()),
+
 	path(NAMESPACE + '/admin/', admin.site.urls),
 
 	path(NAMESPACE + '/', views.TestView.as_view()),
@@ -33,4 +37,4 @@ urlpatterns = [
 	path(NAMESPACE + '/getuser/<str:username>/', views.UserGetView.as_view()),
 	path(NAMESPACE + '/user/<str:username>/', views.UserChangeView.as_view()),
 	path(NAMESPACE + '/users/', views.UserListView.as_view())
-]
+] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

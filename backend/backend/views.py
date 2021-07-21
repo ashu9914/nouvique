@@ -1,6 +1,7 @@
 import json
 import traceback
 
+from django.shortcuts import render
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,6 +20,10 @@ ROLE_NAME_TO_CODE = {
 	"role1" : 1,
 	"role2" : 2
 }
+
+class IndexView(APIView) :
+	def get(self, request):
+		return render(request, 'index.html')
 
 class TestView(APIView):
 	def get(self, request):
