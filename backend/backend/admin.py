@@ -20,17 +20,9 @@ class UserAdmin(BaseUserAdmin):
 	search_fields = ('username', 'email', 'first_name', 'last_name')
 	ordering = ('username', )
 
-class ItemAdmin(BaseUserAdmin):
-	form = UserChangeForm
-	fieldsets = (
-		(None, {'fields': ('name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4')}),
-	)
-	add_fieldsets = (
-		(None, {'classes': ('wide', ), 'fields': ('name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4'), }),
-	)
-	list_display = ['name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4']
-	search_fields = ('name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4')
-	ordering = ('name', )
+class ItemAdmin(admin.ModelAdmin):
+	fields = ('name', 'seller', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4')
+	ordering = ('name', 'seller')
 
-admin.site.register(Item, ItemAdmin)
 admin.site.register(User, UserAdmin)
+admin.site.register(Item, ItemAdmin)

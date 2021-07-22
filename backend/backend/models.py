@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import datetime, date
 
 class User(AbstractUser):
-	username = models.CharField(max_length=128, unique=True, primary_key=True)
+	username = models.CharField(max_length=128, unique=True, primary_key=True, db_index=True)
 	email = models.EmailField(_('email address'))
 	location_town = models.CharField(max_length=128, default="")
 	location_country = models.CharField(max_length=64, default="")
@@ -14,7 +14,7 @@ class User(AbstractUser):
 	verified = models.BooleanField(default=False)
 
 	USERNAME_FIELD = 'username'
-	REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password']
+	REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password', 'location_town', 'location_country', 'location_postcode']
 	
 	def __str__(self):
 		return "{}".format(self.email)
