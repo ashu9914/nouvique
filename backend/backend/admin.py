@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
-from backend.models import User
+from backend.models import User, Item
 
 class UserAdmin(BaseUserAdmin):
 	form = UserChangeForm
@@ -20,4 +20,17 @@ class UserAdmin(BaseUserAdmin):
 	search_fields = ('username', 'email', 'first_name', 'last_name')
 	ordering = ('username', )
 
+class ItemAdmin(BaseUserAdmin):
+	form = UserChangeForm
+	fieldsets = (
+		(None, {'fields': ('name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4')}),
+	)
+	add_fieldsets = (
+		(None, {'classes': ('wide', ), 'fields': ('name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4'), }),
+	)
+	list_display = ['name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4']
+	search_fields = ('name', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4')
+	ordering = ('name', )
+
+admin.site.register(Item, ItemAdmin)
 admin.site.register(User, UserAdmin)
