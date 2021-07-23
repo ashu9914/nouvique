@@ -226,7 +226,7 @@ export default class ProfileView extends React.Component<Props, State> {
 					</Row>
 
 					<Row>
-						<Col>
+						<span style={{ display: "inherit" }}>
 							{this.state.isUser ?
 								<Form onSubmit={this.handleFormSubmit}>
 									<Form.Label>Town/City</Form.Label>
@@ -244,11 +244,10 @@ export default class ProfileView extends React.Component<Props, State> {
 								</Form>
 								:
 								<div>
-									{this.state.user.location_town}
+									{this.state.user.location_town},
 								</div>
 							}
-						</Col>
-						<Col>
+							&nbsp;
 							{this.state.isUser ?
 								<Form onSubmit={this.handleFormSubmit}>
 									<Form.Label>Country</Form.Label>
@@ -269,7 +268,7 @@ export default class ProfileView extends React.Component<Props, State> {
 									{this.state.user.location_country}
 								</div>
 							}
-						</Col>
+						</span>
 					</Row>
 
 
