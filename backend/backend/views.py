@@ -35,7 +35,7 @@ class RegisterView(APIView):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
 
-			User.objects.create_user(req['username'], req['email'], req['password'], first_name=req['first_name'], last_name=req['last_name'])
+			User.objects.create_user(username=req['username'], email=req['email'], password=req['password'], first_name=req['first_name'], last_name=req['last_name'], location_town=req['location_town'], location_country=req['location_country'], location_postcode=req['location_postcode'])
 			
 			ret_user = User.objects.get(username=req['username'])
 			
@@ -88,10 +88,16 @@ class UserChangeView(APIView):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
 
+			print(req)
+
 			user = User.objects.get(username=username)
 			user.first_name = req["first_name"]
 			user.last_name = req["last_name"]
 			user.email = req["email"]
+			user.location_town = req["location_town"]
+			user.location_country = req["location_country"]
+			user.location_postcode = req["location_postcode"]
+			user.bio = req["bio"]
 
 			user.save()
 			

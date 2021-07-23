@@ -5,7 +5,7 @@ import { Result } from 'neverthrow';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { UserRESTSubmit, UserREST, Tokens, PageProps, resolveGETCall, resolvePUTCall } from '../utils';
+import { UserRESTSubmit, UserREST, UserRESTKeys, Tokens, PageProps, resolveGETCall, resolvePUTCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
@@ -19,7 +19,7 @@ interface Props extends RouteComponentProps<MatchParams>, PageProps { }
 
 interface State {
 	user: UserREST,
-	form: UserREST,
+	form: UserRESTSubmit,
 	isUser: boolean,
 	submit_error: boolean
 }
@@ -32,12 +32,20 @@ export default class ProfileView extends React.Component<Props, State> {
 			user: {
 				first_name: "",
 				last_name: "",
-				email: ""
+				email: "",
+				location_town: "",
+				location_country: "",
+				location_postcode: "",
+				bio: ""
 			},
 			form: {
 				first_name: "",
 				last_name: "",
-				email: ""
+				email: "",
+				location_town: "",
+				location_country: "",
+				location_postcode: "",
+				bio: ""
 			},
 			submit_error: false,
 			isUser: localStorage.getItem("username") === this.props.match.params.username
@@ -86,16 +94,24 @@ export default class ProfileView extends React.Component<Props, State> {
 
 	handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const id: string = event.target.id;
-		var index: "email" | "first_name" | "last_name";
+		var index: UserRESTKeys;
 		if (id === "email") {
 			index = "email";
 		} else if (id === "first_name") {
 			index = "first_name";
-		} else { // id === last_name
+		} else if (id === "last_name") {
 			index = "last_name";
+		} else if (id === "location_town") {
+			index = "location_town";
+		} else if (id === "location_country") {
+			index = "location_country";
+		} else if (id === "location_postcode") {
+			index = "location_postcode";
+		} else { // id === bio
+			index = "bio";
 		}
 
-		const cp: UserREST = this.state.form;
+		const cp: UserRESTSubmit = this.state.form;
 		cp[index] = event.target.value;
 		this.setState({ form: cp });
 		this.handleChangeSubmit();
@@ -113,7 +129,7 @@ export default class ProfileView extends React.Component<Props, State> {
 		this.props.history.go(0);
 	}
 
-	getFormVariant = (field: "email" | "first_name" | "last_name"): string => {
+	getFormVariant = (field: UserRESTKeys): string => {
 		if (this.state.form[field] === this.state.user[field]) {
 			return "outline-success";
 		} else {
@@ -125,7 +141,7 @@ export default class ProfileView extends React.Component<Props, State> {
 		}
 	}
 
-	getFormIcon = (field: "email" | "first_name" | "last_name"): JSX.Element => {
+	getFormIcon = (field: UserRESTKeys): JSX.Element => {
 		if (this.state.form[field] === this.state.user[field]) {
 			return <FaCheck />;
 		} else {
@@ -165,11 +181,35 @@ export default class ProfileView extends React.Component<Props, State> {
 					<Row>
 						{this.state.isUser ?
 							<Form onSubmit={this.handleFormSubmit}>
-								<Form.Label>Email</Form.Label>
+								<Form.Label>Bio</Form.Label>
 								<InputGroup className="mb-3">
 									<Form.Control
 										required
 										type="text"
+										as="textarea"
+										id="bio"
+										value={this.state.form.bio}
+										onChange={this.handleFormChange} />
+									<Button variant={this.getFormVariant("bio")} disabled>
+										{this.getFormIcon("bio")}
+									</Button>
+								</InputGroup>
+							</Form>
+							:
+							<div>
+								{this.state.user.bio}
+							</div>
+						}
+					</Row>
+
+					<Row>
+						{this.state.isUser ?
+							<Form onSubmit={this.handleFormSubmit}>
+								<Form.Label>Email</Form.Label>
+								<InputGroup className="mb-3">
+									<Form.Control
+										required
+										type="email"
 										id="email"
 										value={this.state.form.email}
 										onChange={this.handleFormChange} />
@@ -185,8 +225,74 @@ export default class ProfileView extends React.Component<Props, State> {
 						}
 					</Row>
 
+					<Row>
+						<Col>
+							{this.state.isUser ?
+								<Form onSubmit={this.handleFormSubmit}>
+									<Form.Label>Town/City</Form.Label>
+									<InputGroup className="mb-3">
+										<Form.Control
+											required
+											type="text"
+											id="location_town"
+											value={this.state.form.location_town}
+											onChange={this.handleFormChange} />
+										<Button variant={this.getFormVariant("location_town")} disabled>
+											{this.getFormIcon("location_town")}
+										</Button>
+									</InputGroup>
+								</Form>
+								:
+								<div>
+									{this.state.user.location_town}
+								</div>
+							}
+						</Col>
+						<Col>
+							{this.state.isUser ?
+								<Form onSubmit={this.handleFormSubmit}>
+									<Form.Label>Country</Form.Label>
+									<InputGroup className="mb-3">
+										<Form.Control
+											required
+											type="text"
+											id="location_country"
+											value={this.state.form.location_country}
+											onChange={this.handleFormChange} />
+										<Button variant={this.getFormVariant("location_country")} disabled>
+											{this.getFormIcon("location_country")}
+										</Button>
+									</InputGroup>
+								</Form>
+								:
+								<div>
+									{this.state.user.location_country}
+								</div>
+							}
+						</Col>
+					</Row>
+
+
+
 					{this.state.isUser &&
 						<React.Fragment>
+							<Row>
+								<Form onSubmit={this.handleFormSubmit}>
+									<Form.Label>Postcode</Form.Label>
+									<InputGroup className="mb-3">
+										<Form.Control
+											required
+											type="text"
+											id="location_postcode"
+											value={this.state.form.location_postcode}
+											onChange={this.handleFormChange} />
+										<Button variant={this.getFormVariant("location_postcode")} disabled>
+											{this.getFormIcon("location_postcode")}
+										</Button>
+									</InputGroup>
+								</Form>
+							</Row>
+
 							<Row>
 								<Form onSubmit={this.handleFormSubmit}>
 									<Form.Label>First Name</Form.Label>

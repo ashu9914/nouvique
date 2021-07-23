@@ -27,4 +27,8 @@ def get_public_user_object(user) :
 		"email" : user.email,
 		"first_name" : user.first_name,
 		"last_name" : user.last_name,
+		"location_town" : user.location_town,
+		"location_country" : user.location_country,
+		"location_postcode" : user.location_postcode,
+		"bio" : user.bio
 	}
