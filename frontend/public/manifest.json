@@ -1,6 +1,6 @@
 {
-  "short_name": "TeleView",
-  "name": "TeleView - Find Like Minded Film and Show Buffs",
+  "short_name": "Nouvique",
+  "name": "Nouvique - Support Unique Businesses",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,11 +11,6 @@
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
     }
   ],
   "start_url": ".",
