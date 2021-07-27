@@ -33,7 +33,7 @@ else:
 DEBUG = True
 
 ALLOWED_HOSTS = [
-	"teleview.pythonanywhere.com",
+	"nouvique.pythonanywhere.com",
 	"localhost",
 ]
 
