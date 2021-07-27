@@ -1,8 +1,8 @@
 {
-	"name": "TeleView",
+	"name": "Nouvique",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://teleview.pythonanywhere.com/static/",
+	"homepage": "https://nouvique.pythonanywhere.com/static/",
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.14.1",
 		"@testing-library/react": "^11.2.7",

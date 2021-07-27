@@ -26,7 +26,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 								src={process.env.PUBLIC_URL + '/logo192.png'}
 								className='nav-bar-logo d-inline-block align-top'
 							/>{' '}
-              TeleView
+              Nouvique
             </Navbar.Brand>
 					</LinkContainer>
 
