@@ -38,21 +38,34 @@ export interface TokenREST {
 export interface UserREST {
 	first_name: string,
 	last_name: string,
-	email: string
+	email: string,
+	location_town: string,
+	location_country: string,
+	location_postcode: string,
+	bio: string
 }
+
+export type UserRESTKeys = "email" | "first_name" | "last_name" | "location_town" | "location_country" | "location_postcode" | "bio";
 
 export interface RegistrationRESTSubmit {
 	username: string,
 	password: string,
 	first_name: string,
 	last_name: string,
-	email: string
+	email: string,
+	location_town: string,
+	location_country: string,
+	location_postcode: string,
 }
 
 export interface UserRESTSubmit {
 	first_name: string,
 	last_name: string,
-	email: string
+	email: string,
+	location_town: string,
+	location_country: string,
+	location_postcode: string,
+	bio: string
 }
 
 interface RefreshTokensRESTSubmit {
