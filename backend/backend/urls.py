@@ -34,5 +34,13 @@ urlpatterns = [
 
 	path(NAMESPACE + '/getuser/<str:username>/', views.UserGetView.as_view()),
 	path(NAMESPACE + '/user/<str:username>/', views.UserChangeView.as_view()),
-	path(NAMESPACE + '/users/', views.UserListView.as_view())
+	path(NAMESPACE + '/users/', views.UserListView.as_view()),
+
+	path(NAMESPACE + '/getitems/<str:username>/', views.ItemsGetView.as_view()),
+	path(NAMESPACE + '/getitems/<str:username>/<str:name>/', views.ItemSpecificGetView.as_view()),
+	path(NAMESPACE + '/items/<str:username>/<str:name>/', views.ItemSpecificChangeView.as_view()),
+
+	path(NAMESPACE + '/getitemtypes/<str:username>/<str:name>/', views.ItemTypeGetView.as_view()),
+	path(NAMESPACE + '/itemtypes/<str:username>/<str:name>/', views.ItemTypeSpecificCreateView.as_view()),
+	path(NAMESPACE + '/itemtypes/<int:id>/', views.ItemTypeSpecificChangeView.as_view())
 ] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

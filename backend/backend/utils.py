@@ -32,3 +32,28 @@ def get_public_user_object(user) :
 		"location_postcode" : user.location_postcode,
 		"bio" : user.bio
 	}
+
+def get_public_item_object(item) :
+	return {
+		"name" : item.name,
+		"bio" : item.bio,
+		"seller_name" : item.seller.username,
+		"upload_date" : item.upload_date.strftime('%Y-%m-%dT%H:%M:%SZ'),
+		"shape" : item.shape,
+		"colour" : item.colour,
+		"tag0" : item.tag0,
+		"tag1" : item.tag1,
+		"tag2" : item.tag2,
+		"tag3" : item.tag3,
+		"tag4" : item.tag4
+	}
+
+def get_public_itemtype_object(itemtype) :
+	return {
+		"id" : itemtype.id,
+		"item" : itemtype.item.name,
+		"quantity" : itemtype.quantity,
+		"size" : itemtype.size,
+		"price" : itemtype.price,
+		"available" : itemtype.available
+	}
