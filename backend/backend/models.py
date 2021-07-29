@@ -34,7 +34,6 @@ class Item(models.Model):
 	tag3 = models.CharField(max_length=32)
 	tag4 = models.CharField(max_length=32)
 
-
 class ItemType(models.Model):
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	quantity = models.IntegerField()

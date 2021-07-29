@@ -254,6 +254,8 @@ class UserChangeView(APIView):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
 
+			print(req)
+
 			user = User.objects.get(username=username)
 			user.first_name = req["first_name"]
 			user.last_name = req["last_name"]
