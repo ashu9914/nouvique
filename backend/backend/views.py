@@ -81,6 +81,78 @@ class UserGetView(APIView):
 			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
+class ItemsGetView(APIView):
+	def get(self, request, username):
+		user = User.objects.get(username=username)
+		items = Item.objects.get(seller=user)
+		l = []
+		for item in items:
+			l.append(get_public_item_object(item))
+
+		return Response(l, status=STATUS_CODE_2xx.SUCCESS.value)
+
+class ItemsSpecificGetView(APIView):
+	def get(self, request, username, name):
+		user = User.objects.get(username=username)
+		item = Item.objects.get(seller=user, name=name)
+		
+		return Response(get_public_item_object(item), status=STATUS_CODE_2xx.SUCCESS.value)
+
+class ItemSpecificChangeView(APIView):
+	permission_classes = (IsAuthenticated, )
+
+	def put(self, request, username, name):
+		try :
+			req = json.loads(request.body.decode('utf-8'))
+
+			user = User.objects.get(username=username)
+			user.first_name = req["first_name"]
+			user.last_name = req["last_name"]
+			user.email = req["email"]
+
+			user.save()
+			
+			user = User.objects.get(username=username)
+			return Response(get_public_item_object(item), status=STATUS_CODE_2xx.ACCEPTED.value)
+		
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+	def post(self, request, username, name) :
+		try :
+			req = json.loads(request.body.decode('utf-8'))
+
+			if user :
+				tokens = get_tokens_for_user(user)
+
+				return Response(get_public_item_object(item), status=STATUS_CODE_2xx.ACCEPTED.value)
+				
+			else :
+				return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+	def delete(self, request, username, name):
+		try :
+			user = User.objects.get(username=username)
+			item = Item.objects.get(username=username, name=name)
+			item.delete()
+
+			return Response({}, status=STATUS_CODE_2xx.NO_CONTENT.value)
+			return Response({}, status=STATUS_CODE_2xx.NO_CONTENT.value)
+		
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class UserListView(APIView):
+	def get(self, request):
+		l = User.objects.all()
+		users = []
+		for u in l:
+			users.append(get_public_user_object(u))
+
+		return Response(users, status=STATUS_CODE_2xx.SUCCESS.value)
+
 class UserChangeView(APIView):
 	permission_classes = (IsAuthenticated, )
 
