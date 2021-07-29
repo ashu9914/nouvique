@@ -1,5 +1,6 @@
 # save old database
 cp release/backend/db.sqlite3 .
+cp release/backend/secrets.json .
 
 # remove old version
 rm release.zip
@@ -13,6 +14,7 @@ unzip release.zip
 
 # move in old database
 cp db.sqlite3 release/backend/
+cp secrets.json release/backend/
 
 # setup backend + dependencies
 cd release
