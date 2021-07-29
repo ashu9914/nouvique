@@ -76,6 +76,37 @@ interface RefreshTokensREST {
 	access: string
 }
 
+export interface ItemREST {
+	name: string,
+	bio: string,
+	seller_name: string,
+	upload_date: string,
+	shape: string,
+	colour: string,
+	tag0: string,
+	tag1: string,
+	tag2: string,
+	tag3: string,
+	tag4: string
+}
+
+export interface ItemRESTSubmit {
+	bio: string,
+	shape: string,
+	colour: string,
+	tag0: string,
+	tag1: string,
+	tag2: string,
+	tag3: string,
+	tag4: string
+}
+
+export type ItemRESTSubmitKeys = "bio" | "shape" | "colour" | "tag0" | "tag1" | "tag2" | "tag3" | "tag4";
+export type ItemColours = "yellow" | "black" | "silver";
+export type ItemShapes = "shirt" | "jewelery" | "skirt";
+export type ItemStyles = "" | "kitsch" | "modern" | "pastel" | "vibey" | "deadstock";
+
+
 async function getNewAccessToken(): Promise<boolean> {
 	try {
 		const tokens: Tokens = JSON.parse(localStorage.tokens);

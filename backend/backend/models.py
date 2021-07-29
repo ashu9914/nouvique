@@ -23,46 +23,22 @@ class Item(models.Model):
 	name = models.CharField(max_length=256)
 	seller = models.ForeignKey(User, on_delete=models.CASCADE)
 	bio = models.CharField(max_length=256)
-	upload_date = models.DateField(auto_now_add=True)
+	upload_date = models.DateTimeField(auto_now_add=True)
 	# pictures : Set of strings/static stubs
-	
-	class ItemShape(models.TextChoices):
-		SHIRT = 'shirt'
-		JEWELERY = 'jewelery'
-		SKIRT = 'skirt'
+	shape = models.CharField(max_length=32)
+	colour = models.CharField(max_length=32)
 
-	shape = models.CharField(max_length=32, choices=ItemShape.choices)
-
-	class ItemColour(models.TextChoices):
-		YELLOW = 'yellow'
-		SILVER = 'silver'
-		BLACK = 'black'
-
-	colour = models.CharField(max_length=32, choices=ItemColour.choices)
-
-	class ItemTag(models.TextChoices):
-		KITSCH = 'kitsch'
-		MODERN = 'modern'
-		PASTEL = 'pastel'
-		VIBEY = 'vibey'
-		DEADSTOCK = 'deadstock'
-
-	tag0 = models.CharField(max_length=32, choices=ItemTag.choices)
-	tag1 = models.CharField(max_length=32, choices=ItemTag.choices)
-	tag2 = models.CharField(max_length=32, choices=ItemTag.choices)
-	tag3 = models.CharField(max_length=32, choices=ItemTag.choices)
-	tag4 = models.CharField(max_length=32, choices=ItemTag.choices)
+	tag0 = models.CharField(max_length=32)
+	tag1 = models.CharField(max_length=32)
+	tag2 = models.CharField(max_length=32)
+	tag3 = models.CharField(max_length=32)
+	tag4 = models.CharField(max_length=32)
 
 
 class ItemType(models.Model):
-	class ItemTypeSize(models.TextChoices) :
-		SMALL = 'S'
-		MEDIUM = 'M'
-		LARGE = 'L'
-
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	quantity = models.IntegerField()
-	size = models.CharField(max_length=32, choices=ItemTypeSize.choices)
+	size = models.CharField(max_length=32)
 	price = models.FloatField()
 
 class Order(models.Model):

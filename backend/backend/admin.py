@@ -22,7 +22,7 @@ class UserAdmin(BaseUserAdmin):
 
 class ItemAdmin(admin.ModelAdmin):
 	fields = ('name', 'seller', 'bio', 'colour', 'shape', 'tag0', 'tag1', 'tag2', 'tag3', 'tag4')
-	ordering = ('name', 'seller')
+	ordering = ('name', 'seller', 'upload_date')
 
 class ItemTypeAdmin(admin.ModelAdmin):
 	fields = ('item', 'quantity', 'size', 'price')

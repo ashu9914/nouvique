@@ -7,10 +7,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from backend.models import User
+from backend.models import User, Item
 from backend.utils import (
 	get_tokens_for_user,
 	get_public_user_object,
+	get_public_item_object,
 	STATUS_CODE_4xx,
 	STATUS_CODE_2xx
 )
@@ -83,36 +84,52 @@ class UserGetView(APIView):
 
 class ItemsGetView(APIView):
 	def get(self, request, username):
-		user = User.objects.get(username=username)
-		items = Item.objects.get(seller=user)
-		l = []
-		for item in items:
-			l.append(get_public_item_object(item))
+		try:
+			user = User.objects.get(username=username)
+			items = Item.objects.filter(seller=user).order_by('-upload_date')
+			l = []
+			for item in items:
+				l.append(get_public_item_object(item))
 
-		return Response(l, status=STATUS_CODE_2xx.SUCCESS.value)
+			return Response(l, status=STATUS_CODE_2xx.SUCCESS.value)
+		except Exception :
+			traceback.print_exc()
+			return Response([], status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
-class ItemsSpecificGetView(APIView):
+class ItemSpecificGetView(APIView):
 	def get(self, request, username, name):
-		user = User.objects.get(username=username)
-		item = Item.objects.get(seller=user, name=name)
+		try :
+			user = User.objects.get(username=username)
+			item = Item.objects.get(seller=user, name=name)
+			
+			return Response(get_public_item_object(item), status=STATUS_CODE_2xx.SUCCESS.value)
 		
-		return Response(get_public_item_object(item), status=STATUS_CODE_2xx.SUCCESS.value)
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class ItemSpecificChangeView(APIView):
-	permission_classes = (IsAuthenticated, )
+	# permission_classes = (IsAuthenticated, )
 
 	def put(self, request, username, name):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
 
 			user = User.objects.get(username=username)
-			user.first_name = req["first_name"]
-			user.last_name = req["last_name"]
-			user.email = req["email"]
+			item = Item.objects.get(seller=user, name=name)
 
-			user.save()
+			item.bio = req["bio"]
+			item.shape = req["shape"]
+			item.colour = req["colour"]
+			item.tag0 = req["tag0"]
+			item.tag1 = req["tag1"]
+			item.tag2 = req["tag2"]
+			item.tag3 = req["tag3"]
+			item.tag4 = req["tag4"]
+
+			item.save()
 			
-			user = User.objects.get(username=username)
+			item = Item.objects.get(seller=username, name=name)
 			return Response(get_public_item_object(item), status=STATUS_CODE_2xx.ACCEPTED.value)
 		
 		except Exception :
@@ -123,35 +140,41 @@ class ItemSpecificChangeView(APIView):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
 
-			if user :
-				tokens = get_tokens_for_user(user)
+			user = User.objects.get(username=username)
+			if not Item.objects.filter(seller=user, name=name).exists() :
+				item = Item.objects.create(seller=user, name=name)
 
+				item.bio = req["bio"]
+				item.shape = req["shape"]
+				item.colour = req["colour"]
+				item.tag0 = req["tag0"]
+				item.tag1 = req["tag1"]
+				item.tag2 = req["tag2"]
+				item.tag3 = req["tag3"]
+				item.tag4 = req["tag4"]
+
+				item.save()
+
+				item = Item.objects.get(seller=username, name=name)
 				return Response(get_public_item_object(item), status=STATUS_CODE_2xx.ACCEPTED.value)
-				
 			else :
 				return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 	def delete(self, request, username, name):
 		try :
 			user = User.objects.get(username=username)
-			item = Item.objects.get(username=username, name=name)
+			item = Item.objects.get(seller=user, name=name)
 			item.delete()
 
-			return Response({}, status=STATUS_CODE_2xx.NO_CONTENT.value)
 			return Response({}, status=STATUS_CODE_2xx.NO_CONTENT.value)
 		
 		except Exception :
 			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
-
-class UserListView(APIView):
-	def get(self, request):
-		l = User.objects.all()
-		users = []
-		for u in l:
-			users.append(get_public_user_object(u))
-
-		return Response(users, status=STATUS_CODE_2xx.SUCCESS.value)
 
 class UserChangeView(APIView):
 	permission_classes = (IsAuthenticated, )
@@ -159,8 +182,6 @@ class UserChangeView(APIView):
 	def put(self, request, username):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
-
-			print(req)
 
 			user = User.objects.get(username=username)
 			user.first_name = req["first_name"]
