@@ -7,11 +7,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from backend.models import User, Item
+from backend.models import User, Item, ItemType
 from backend.utils import (
 	get_tokens_for_user,
 	get_public_user_object,
 	get_public_item_object,
+	get_public_itemtype_object,
 	STATUS_CODE_4xx,
 	STATUS_CODE_2xx
 )
@@ -109,7 +110,7 @@ class ItemSpecificGetView(APIView):
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class ItemSpecificChangeView(APIView):
-	# permission_classes = (IsAuthenticated, )
+	permission_classes = (IsAuthenticated, )
 
 	def put(self, request, username, name):
 		try :
@@ -172,6 +173,76 @@ class ItemSpecificChangeView(APIView):
 
 			return Response({}, status=STATUS_CODE_2xx.NO_CONTENT.value)
 		
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class ItemTypeGetView(APIView) :
+	def get(self, request, username, name):
+		try:
+			user = User.objects.get(username=username)
+			item = Item.objects.get(seller=user, name=name)
+			itemtypes = ItemType.objects.filter(item=item).order_by('size')
+			l = []
+			for t in itemtypes:
+				l.append(get_public_itemtype_object(t))
+
+			return Response(l, status=STATUS_CODE_2xx.SUCCESS.value)
+		except Exception :
+			traceback.print_exc()
+			return Response([], status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class ItemTypeSpecificChangeView(APIView) :
+	permission_classes = (IsAuthenticated, )
+
+	def put(self, request, id):
+		try :
+			req = json.loads(request.body.decode('utf-8'))
+
+			itemtype = ItemType.objects.get(id=id)
+
+			itemtype.quantity = req["quantity"]
+			itemtype.size = req["size"]
+			itemtype.price = req["price"]
+			itemtype.available = req["available"]
+			
+			itemtype.save()
+			
+			itemtype = ItemType.objects.get(id=id)
+			return Response(get_public_itemtype_object(itemtype), status=STATUS_CODE_2xx.ACCEPTED.value)
+		
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+	def delete(self, request, id):
+		try :
+			itemtype = ItemType.objects.get(id=id)
+			itemtype.delete()
+
+			return Response({}, status=STATUS_CODE_2xx.NO_CONTENT.value)
+		
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class ItemTypeSpecificCreateView(APIView):
+	permission_classes = (IsAuthenticated, )
+	
+	def post(self, request, username, name) :
+		try :
+			req = json.loads(request.body.decode('utf-8'))
+
+			user = User.objects.get(username=username)
+			item = Item.objects.get(seller=user, name=name)
+
+			itemtype = ItemType.objects.create(item=item, quantity=req["quantity"], size=req["size"], price=req["price"], available=req["available"])
+
+			itemtype.save()
+
+			itemtype = ItemType.objects.get(id=itemtype.id)
+			return Response(get_public_itemtype_object(itemtype), status=STATUS_CODE_2xx.ACCEPTED.value)
+
 		except Exception :
 			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)

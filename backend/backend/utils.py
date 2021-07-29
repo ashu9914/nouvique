@@ -47,3 +47,13 @@ def get_public_item_object(item) :
 		"tag3" : item.tag3,
 		"tag4" : item.tag4
 	}
+
+def get_public_itemtype_object(itemtype) :
+	return {
+		"id" : itemtype.id,
+		"item" : itemtype.item.name,
+		"quantity" : itemtype.quantity,
+		"size" : itemtype.size,
+		"price" : itemtype.price,
+		"available" : itemtype.available
+	}

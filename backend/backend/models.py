@@ -40,6 +40,7 @@ class ItemType(models.Model):
 	quantity = models.IntegerField()
 	size = models.CharField(max_length=32)
 	price = models.FloatField()
+	available = models.BooleanField(default=True)
 
 class Order(models.Model):
 	buyer_name = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,7 +48,7 @@ class Order(models.Model):
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	item_type = models.ForeignKey(ItemType, on_delete=models.CASCADE)
 	quantity = models.IntegerField()
-	purchase_date = models.DateField(auto_now_add=True)
+	purchase_date = models.DateTimeField(auto_now_add=True)
 	shipped = models.BooleanField(default=False)
 	arrived = models.BooleanField(default=False)
 	shipping_tag = models.CharField(max_length=256)

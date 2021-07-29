@@ -106,6 +106,31 @@ export type ItemColours = "yellow" | "black" | "silver";
 export type ItemShapes = "shirt" | "jewelery" | "skirt";
 export type ItemStyles = "" | "kitsch" | "modern" | "pastel" | "vibey" | "deadstock";
 
+export interface ItemTypeRESTNewSubmit {
+	price: number,
+	quantity: number,
+	size: string,
+	available: boolean
+}
+
+export interface ItemTypeRESTChangeSubmit {
+	price: number,
+	quantity: number,
+	size: string,
+	available: boolean
+}
+
+export interface ItemTypeREST {
+	id: string,
+	item: string,
+	price: number,
+	quantity: number,
+	size: string,
+	available: boolean
+}
+
+export type ItemTypeRESTNewSubmitKeys = "price" | "quantity" | "available" | "size";
+export type ItemTypeRESTChangeSubmitKeys = "price" | "quantity" | "available" | "size";
 
 async function getNewAccessToken(): Promise<boolean> {
 	try {
