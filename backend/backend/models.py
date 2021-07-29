@@ -52,3 +52,26 @@ class Item(models.Model):
 	tag2 = models.CharField(max_length=32, choices=ItemTag.choices)
 	tag3 = models.CharField(max_length=32, choices=ItemTag.choices)
 	tag4 = models.CharField(max_length=32, choices=ItemTag.choices)
+
+
+class ItemType(models.Model):
+	class ItemTypeSize(models.TextChoices) :
+		SMALL = 'S'
+		MEDIUM = 'M'
+		LARGE = 'L'
+
+	item = models.ForeignKey(Item, on_delete=models.CASCADE)
+	quantity = models.IntegerField()
+	size = models.CharField(max_length=32, choices=ItemTypeSize.choices)
+	price = models.FloatField()
+
+class Order(models.Model):
+	buyer_name = models.ForeignKey(User, on_delete=models.CASCADE)
+	# seller_name can be accessed through item
+	item = models.ForeignKey(Item, on_delete=models.CASCADE)
+	item_type = models.ForeignKey(ItemType, on_delete=models.CASCADE)
+	quantity = models.IntegerField()
+	purchase_date = models.DateField(auto_now_add=True)
+	shipped = models.BooleanField(default=False)
+	arrived = models.BooleanField(default=False)
+	shipping_tag = models.CharField(max_length=256)
