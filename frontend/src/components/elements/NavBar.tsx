@@ -19,69 +19,50 @@ export default class NavBar extends React.PureComponent<Props, State> {
 		return (
 			<React.Fragment>
 				<Navbar bg='transparent' variant='light'>
-					<LinkContainer to='/'>
-						<Navbar.Brand>
-							<img
-								alt=''
-								src={process.env.PUBLIC_URL + '/logo192.png'}
-								className='nav-bar-logo d-inline-block align-top'
-							/>{' '}
-              TeleView
-            </Navbar.Brand>
-					</LinkContainer>
 
-					<Navbar.Collapse className='justify-content-end'>
-						<Nav className='mr-auto'>
-							<Nav.Item>
+					<Navbar.Collapse className='justify-content-center'>
+						<Nav className='mr-auto nav_style'>
+							<Nav.Item className="item_style">
 								<NavLink
-									className='nav-link nav-right-side'
+									className='nav-link'
 									isActive={(match, location) => location.pathname === '/'}
-									activeClassName='nav-link active nav-right-side'
+									activeClassName='nav-link active'
 									to={{ pathname: '/' }}>
 									Home
-              </NavLink>
+								</NavLink>
 							</Nav.Item>
 
-							<Nav.Item>
+							<Nav.Item className="item_style">
 								<NavLink
-									className='nav-link nav-right-side'
-									activeClassName='nav-link active nav-right-side'
+									className='nav-link'
+									activeClassName='nav-link active'
 									to={{ pathname: '/media' }}>
-									Media
-              </NavLink>
+									Browse
+								</NavLink>
 							</Nav.Item>
 
-							<Nav.Item>
-								{(localStorage.getItem("username") && localStorage.getItem("username") !== '') ?
-									<NavLink
-										className='nav-link nav-right-side'
-										activeClassName='nav-link active nav-right-side'
-										to={{ pathname: '/profile/' + localStorage.username }}>
-										Profile
-									</NavLink>
-									:
-									<NavLink
-										className='nav-link nav-right-side'
-										isActive={(match, location) => location.pathname === '/profile/*'}
-										activeClassName='nav-link active nav-right-side'
-										to={{ pathname: '/login' }}>
-										Profile
-                </NavLink>
-								}
+							<Nav.Item className="item_style">
+								<NavLink
+									className='nav-link'
+									activeClassName='nav-link active'
+									to={{ pathname: '/ethics' }}>
+									Ethics
+								</NavLink>
 							</Nav.Item>
+
 
 							{(localStorage.getItem("username") && localStorage.getItem("username") !== '') ?
-								<Navbar.Text className='nav-right-end'>
+								<Navbar.Text className=''>
 									Hi, <Link to={{ pathname: '/profile/' + localStorage.getItem("username") }}>{localStorage.getItem("username")}</Link>
 								</Navbar.Text>
 								:
-								<Nav.Item>
+								<Nav.Item className="item_style">
 									<NavLink
-										className='nav-link nav-right-end'
+										className='nav-link'
 										activeClassName='nav-link active'
 										to={{ pathname: '/login' }}>
-										Login/Signup
-                  </NavLink>
+										Login
+									</NavLink>
 								</Nav.Item>
 							}
 						</Nav>

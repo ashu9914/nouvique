@@ -18,13 +18,21 @@ export default class BasePage extends React.PureComponent<Props, State> {
 	render() {
 		return (
 			<React.Fragment>
-				<NavBar />
+				<div className="master">
+					<img
+						alt=''
+						src={process.env.PUBLIC_URL + '/logo_main.png'}
+						className='logo'
+					/>{' '}
+					<NavBar />
 
-				<div className='mainbody'>
-					<AlertBar {...this.props} />
+					<div className='mainbody'>
+						<AlertBar {...this.props} />
 
-					{this.props.children}
+						{this.props.children}
+					</div>
 				</div>
+
 			</React.Fragment>
 		)
 	}

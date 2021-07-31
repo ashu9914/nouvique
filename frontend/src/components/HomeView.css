@@ -1,0 +1,11 @@
+.subtitle{
+  font-family: 'Sanchez', serif;
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom:2.5rem;
+}
+
+.content{
+  padding-top: 2.5rem;
+  background-color:rgb(232, 190, 144) ;
+}

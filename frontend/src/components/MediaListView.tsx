@@ -50,9 +50,9 @@ export default class MediaListView extends React.Component<Props, State> {
 			<React.Fragment>
 				<BasePage {...this.props}>
 					<Row>
-						<h1>
-							Media List
-            </h1>
+						<h1 className="title" >
+							browse
+						</h1>
 					</Row>
 
 					<Row>
