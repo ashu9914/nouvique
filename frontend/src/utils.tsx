@@ -38,21 +38,34 @@ export interface TokenREST {
 export interface UserREST {
 	first_name: string,
 	last_name: string,
-	email: string
+	email: string,
+	location_town: string,
+	location_country: string,
+	location_postcode: string,
+	bio: string
 }
+
+export type UserRESTKeys = "email" | "first_name" | "last_name" | "location_town" | "location_country" | "location_postcode" | "bio";
 
 export interface RegistrationRESTSubmit {
 	username: string,
 	password: string,
 	first_name: string,
 	last_name: string,
-	email: string
+	email: string,
+	location_town: string,
+	location_country: string,
+	location_postcode: string,
 }
 
 export interface UserRESTSubmit {
 	first_name: string,
 	last_name: string,
-	email: string
+	email: string,
+	location_town: string,
+	location_country: string,
+	location_postcode: string,
+	bio: string
 }
 
 interface RefreshTokensRESTSubmit {
@@ -62,6 +75,62 @@ interface RefreshTokensRESTSubmit {
 interface RefreshTokensREST {
 	access: string
 }
+
+export interface ItemREST {
+	name: string,
+	bio: string,
+	seller_name: string,
+	upload_date: string,
+	shape: string,
+	colour: string,
+	tag0: string,
+	tag1: string,
+	tag2: string,
+	tag3: string,
+	tag4: string
+}
+
+export interface ItemRESTSubmit {
+	bio: string,
+	shape: string,
+	colour: string,
+	tag0: string,
+	tag1: string,
+	tag2: string,
+	tag3: string,
+	tag4: string
+}
+
+export type ItemRESTSubmitKeys = "bio" | "shape" | "colour" | "tag0" | "tag1" | "tag2" | "tag3" | "tag4";
+export type ItemColours = "yellow" | "black" | "silver";
+export type ItemShapes = "shirt" | "jewelery" | "skirt";
+export type ItemStyles = "" | "kitsch" | "modern" | "pastel" | "vibey" | "deadstock";
+
+export interface ItemTypeRESTNewSubmit {
+	price: number,
+	quantity: number,
+	size: string,
+	available: boolean
+}
+
+export interface ItemTypeRESTChangeSubmit {
+	price: number,
+	quantity: number,
+	size: string,
+	available: boolean
+}
+
+export interface ItemTypeREST {
+	id: string,
+	item: string,
+	price: number,
+	quantity: number,
+	size: string,
+	available: boolean
+}
+
+export type ItemTypeRESTNewSubmitKeys = "price" | "quantity" | "available" | "size";
+export type ItemTypeRESTChangeSubmitKeys = "price" | "quantity" | "available" | "size";
 
 async function getNewAccessToken(): Promise<boolean> {
 	try {

@@ -1,8 +1,8 @@
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/QuestioWo/test-django-full-stack.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/QuestioWo/test-django-full-stack/context:javascript) 
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/QuestioWo/test-django-full-stack.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/QuestioWo/test-django-full-stack/context:python)
 
-# test-django-full-stack
-Test/placeholder for a full-stack web app using Django and React, created in preperation for the Web-Application Development group project.
+# Nouvique
+A web application built for the WAD2 course that is meant to fill the gap in the store front market of supporting small unique businesses and helping them grow through interactions with their customers and peers
 
 ## Running
 

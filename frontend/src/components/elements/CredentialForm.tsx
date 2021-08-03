@@ -24,7 +24,10 @@ export default class LoginForm extends React.PureComponent<Props, State> {
 			register: false,
 			first_name: "",
 			last_name: "",
-			email: ""
+			email: "",
+			location_town: "",
+			location_country: "",
+			location_postcode: ""
 		};
 	}
 
@@ -36,7 +39,10 @@ export default class LoginForm extends React.PureComponent<Props, State> {
 			password: this.state.password,
 			first_name: this.state.first_name,
 			last_name: this.state.last_name,
-			email: this.state.email
+			email: this.state.email,
+			location_town: this.state.location_town,
+			location_country: this.state.location_country,
+			location_postcode: this.state.location_postcode
 		};
 
 		const path = this.state.register ? '/auth/register/' : '/auth/login/';
@@ -118,6 +124,36 @@ export default class LoginForm extends React.PureComponent<Props, State> {
 									placeholder="example@email.com"
 									value={this.state.email}
 									onChange={async (event: React.ChangeEvent<HTMLInputElement>) => { this.setState({ email: event.target.value }) }} />
+							</Form.Group>
+
+							<Form.Group className="mb-3" controlId="location_town">
+								<Form.Label>Town/City</Form.Label>
+								<Form.Control
+									required
+									type="text"
+									placeholder="Birmingham"
+									value={this.state.location_town}
+									onChange={async (event: React.ChangeEvent<HTMLInputElement>) => { this.setState({ location_town: event.target.value }) }} />
+							</Form.Group>
+
+							<Form.Group className="mb-3" controlId="location_country">
+								<Form.Label>Country</Form.Label>
+								<Form.Control
+									required
+									type="text"
+									placeholder="United Kingdom"
+									value={this.state.location_country}
+									onChange={async (event: React.ChangeEvent<HTMLInputElement>) => { this.setState({ location_country: event.target.value }) }} />
+							</Form.Group>
+
+							<Form.Group className="mb-3" controlId="location_postcode">
+								<Form.Label>Postcode</Form.Label>
+								<Form.Control
+									required
+									type="text"
+									placeholder="L12 7HJ"
+									value={this.state.location_postcode}
+									onChange={async (event: React.ChangeEvent<HTMLInputElement>) => { this.setState({ location_postcode: event.target.value }) }} />
 							</Form.Group>
 						</React.Fragment>
 					}
