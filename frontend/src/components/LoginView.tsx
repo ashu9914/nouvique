@@ -53,17 +53,19 @@ export default class LoginView extends React.Component<Props, State> {
 			<React.Fragment>
 				<BasePage {...this.props}>
 
-					<Container>
-						<Row>
-							<h1 className="title">
-								login
-							</h1>
-						</Row>
-					</Container>
 
 					<Container>
 						<Row>
-							<Col>
+
+							<Col></Col>
+
+							<Col xs={6}>
+								<Row>
+									<h1 className="title">
+										login
+									</h1>
+								</Row>
+
 								<Row>
 									<div>
 										{this.state.apiValue.blah}
@@ -75,8 +77,7 @@ export default class LoginView extends React.Component<Props, State> {
 								</Row>
 							</Col>
 
-							<Col>
-							</Col>
+							<Col></Col>
 
 						</Row>
 

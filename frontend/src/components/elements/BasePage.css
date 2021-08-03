@@ -35,16 +35,16 @@
 .button::after {
   content:"";
   background-color: black;
-  top: -6px;
-  bottom:-6px;
-  left: 5px;
+  top: -4px;
+  bottom:-4px;
+  left: 2px;
   position: absolute;
   width: 1.5px;
 }
 
 .button::after {
   left: auto;
-  right: 5px;
+  right: 2px;
 }
 
 .button:hover {
