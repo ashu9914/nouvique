@@ -19,8 +19,6 @@ export default class NavBar extends React.PureComponent<Props, State> {
 		return (
 			<React.Fragment>
 				<Navbar bg='transparent' variant='light'>
-<<<<<<< HEAD
-=======
 					<LinkContainer to='/'>
 						<Navbar.Brand>
 							<img
@@ -28,10 +26,9 @@ export default class NavBar extends React.PureComponent<Props, State> {
 								src={process.env.PUBLIC_URL + '/logo192.png'}
 								className='nav-bar-logo d-inline-block align-top'
 							/>{' '}
-              Nouvique
-            </Navbar.Brand>
+							Nouvique
+						</Navbar.Brand>
 					</LinkContainer>
->>>>>>> c60f2093e1f413add57856806ca5c01e05d73f71
 
 					<Navbar.Collapse className='justify-content-center'>
 						<Nav className='mr-auto nav_style'>
