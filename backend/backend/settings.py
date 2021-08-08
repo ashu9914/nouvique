@@ -32,7 +32,7 @@ if os.path.exists(secrets_path):
 else:
 	SECRET_KEY = 'dev_key'
 	STRIPE_SECRET_KEY = 'sk_test_51JL4S9JAHFg3rfUPkqO5EOwiS1Cc4O41eR537jHYA9PghuovVdKFy6sKk5WFkg1anTK6RdSdGR1dRF1knZg0Dwlt009jZfQjVg'
-	STRIPE_SECRET_WEBHOOK_KEY = 'whsec_BTfDzr8DPwM82g7BwD18rdeWiE4Rw3yk'
+	STRIPE_SECRET_WEBHOOK_KEY = '' # TODO: populate with own testing webhook key https://stripe.com/docs/payments/handling-payment-events#install-cli
 
 DEPLOYMENT_LINK = "http://localhost:3000"
 DEBUG = True
