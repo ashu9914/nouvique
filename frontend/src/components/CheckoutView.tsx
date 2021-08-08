@@ -19,7 +19,7 @@ interface State {
 	totalValue: number
 }
 
-export default class ProfileView extends React.Component<Props, State> {
+export default class CheckoutView extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 
@@ -31,17 +31,23 @@ export default class ProfileView extends React.Component<Props, State> {
 
 	componentDidMount() {
 		this.retrieveBasket();
-		this.setState({ totalValue: this.props.getTotalBasketPrice() });
+		this.setState((_dummy, props) => (
+			{ totalValue: props.getTotalBasketPrice() }
+		));
 	}
 
 	retrieveBasket = () => {
-		this.setState({ basketItems: this.props.getBasketItems() });
+		this.setState((_dummy, props) => (
+			{ basketItems: props.getBasketItems() }
+		));
 	}
 
 	removeFromBothBaskets = (index: number) => {
 		this.props.removeFromBasket(index);
 		this.retrieveBasket();
-		this.setState({ totalValue: this.props.getTotalBasketPrice() });
+		this.setState((_dummy, props) => (
+			{ totalValue: props.getTotalBasketPrice() }
+		));
 	}
 
 	render() {

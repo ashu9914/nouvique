@@ -28,7 +28,7 @@ def calculate_application_fees(seller_total, item_price, item_quantity):
 	application_fees = 0
 
 	if seller_total > 100 :
-		retapplication_fees = transaction_price * 0.025
+		application_fees = transaction_price * 0.025
 	else :
 		if transaction_price > 2.5 :
 			application_fees = 2.5

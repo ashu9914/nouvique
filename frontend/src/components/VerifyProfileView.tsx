@@ -16,7 +16,7 @@ interface Props extends RouteComponentProps<MatchParams>, PageProps { }
 
 const UNABLE_TO_VERIFY_MESSAGE: string = "Unable to verify account. Please make sure that you have created and completed your Stripe account creation, including submitting all necessary documents and details. You can update your stripe account via your profile settings. If you have verified this, try re-logging in and retrying.";
 
-export default class RefreshUpdateStripeView extends React.Component<Props> {
+export default class VerifyProfileView extends React.Component<Props> {
 	async componentDidMount() {
 		const path: string = verifyUserRESTLink + this.props.match.params.username + '/' + this.props.match.params.account_id + '/';
 		const result: Result<UserVerifyREST, Error> = await resolveGETCall<UserVerifyREST>(path, true);

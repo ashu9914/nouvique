@@ -215,11 +215,9 @@ class PaymentIntentView(APIView) :
 			total = 0
 			seller_total = {}
 			for i, req_item in enumerate(req["item_types"]) :
-				quantity_deducted = False
-				
 				try :
 					# try retrieve the specified items so made-up ones aren't being asked for
-					item = Item.objects.get(name=req_item["name"], seller=req_item["seller_name"])
+					Item.objects.get(name=req_item["name"], seller=req_item["seller_name"])
 					seller = User.objects.get(username=req_item["seller_name"])
 					item_type = ItemType.objects.get(id=req_item["type_id"])
 					
@@ -246,26 +244,17 @@ class PaymentIntentView(APIView) :
 					item_type.available = item_type.available and (item_type.quantity > 0)
 
 					item_type.save()
-					quantity_deducted = True
 
 				except Exception :
 					# add removed quantities back onto items
 					traceback.print_exc()
-					for j, req_item in enumerate(req["item_types"]) :
+					for j, err_req_item in enumerate(req["item_types"]) :
 						if j >= i :
 							break
 						
-						item_type = ItemType.objects.get(id=req_item["type_id"])
+						item_type = ItemType.objects.get(id=err_req_item["type_id"])
 						
-						item_type.quantity = item_type.quantity + req_item["quantity"]
-						item_type.available = item_type.available and (item_type.quantity > 0)
-
-						item_type.save()
-
-					if quantity_deducted :
-						item_type = ItemType.objects.get(id=req_item["type_id"])
-						
-						item_type.quantity = item_type.quantity + req_item["quantity"]
+						item_type.quantity = item_type.quantity + err_req_item["quantity"]
 						item_type.available = item_type.available and (item_type.quantity > 0)
 
 						item_type.save()
@@ -313,7 +302,7 @@ class PaymentIntentView(APIView) :
 						}
 					)
 
-					order = Order.objects.create(
+					Order.objects.create(
 						stripe_payment_intent_id=payment_intent.id, 
 						stripe_client_secret=payment_intent.client_secret, 
 						item=item,
@@ -327,10 +316,10 @@ class PaymentIntentView(APIView) :
 				except Exception:
 					print("Could not handle stripe PaymentIntent and/or order creation")
 					traceback.print_exc()
-					for req_item in req["item_types"] :
-						item_type = ItemType.objects.get(id=req_item["type_id"])
+					for err_req_item in req["item_types"] :
+						item_type = ItemType.objects.get(id=err_req_item["type_id"])
 							
-						item_type.quantity = item_type.quantity + req_item["quantity"]
+						item_type.quantity = item_type.quantity + err_req_item["quantity"]
 						item_type.available = item_type.quantity > 0
 
 						item_type.save()
