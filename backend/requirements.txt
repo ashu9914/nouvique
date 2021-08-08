@@ -6,7 +6,7 @@ charset-normalizer==2.0.4
 Django==3.2.4
 django-cors-headers==3.7.0
 djangorestframework==3.12.4
-djangorestframework-simplejwt==4.4.0
+djangorestframework-simplejwt==4.7.2
 idna==3.2
 pycountry==20.7.3
 pycparser==2.20
