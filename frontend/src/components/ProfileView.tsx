@@ -149,7 +149,7 @@ export default class ProfileView extends React.Component<Props, State> {
 
 		result
 			.map(res => {
-				this.setState({ user: Object.assign({}, res), form: Object.assign({}, res) });
+				this.setState({ user: Object.assign({}, res) });
 
 				return null; // necessary to silence warning
 			})
