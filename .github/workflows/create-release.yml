@@ -36,7 +36,7 @@ jobs:
           mkdir build
           cd ../../
           sed -i 's/DEBUG = True/DEBUG = False/I' backend/backend/settings.py
-          sed -i 's/DEPLOYMENT_LINK = "http://localhost:3000"/DEPLOYMENT_LINK = "https://nouvique.pythonanywhere.com"/I' backend/backend/settings.py
+          sed -i 's/DEPLOYMENT_LINK = \"http://localhost:3000\"/DEPLOYMENT_LINK = \"https://nouvique.pythonanywhere.com\"/I' backend/backend/settings.py
           cp backend/backend/* release/backend/backend/
           cp backend/manage.py release/backend/
           cp backend/requirements.txt release/backend/
