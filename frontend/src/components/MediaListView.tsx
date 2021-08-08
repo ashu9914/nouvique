@@ -10,14 +10,14 @@ import BasePage from './elements/BasePage';
 
 import './MediaListView.css';
 
-interface Props extends RouteComponentProps, PageProps { }
+export interface MediaListViewProps extends RouteComponentProps, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export default class MediaListView extends React.Component<Props, State> {
-	constructor(props: Props) {
+export class MediaListView extends React.Component<MediaListViewProps, State> {
+	constructor(props: MediaListViewProps) {
 		super(props);
 
 		this.state = {

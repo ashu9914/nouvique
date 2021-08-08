@@ -30,7 +30,7 @@ export interface PageProps {
 	checkBasketAvailabilities: () => Promise<void>,
 	getTotalBasketPrice: () => number,
 	stripePromise: Promise<Stripe | null>,
-	alert: AlertBarUpdater,
+	alert: AlertBarUpdater, // only added as App.tsx's state is destructed and this is included as it is a psuedo-global set of value so that the alertbar can be shared across multiple pages
 }
 
 export interface Tokens {

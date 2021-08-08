@@ -7,13 +7,15 @@ import BasePage from './elements/BasePage';
 
 import { UserStripeUpdateLinkREST, resolveGETCall, PageProps, userStripeUpdateLinkRESTLink } from '../utils';
 
+import './RefreshUpdateStripeView.css';
+
 interface MatchParams {
 	username: string
 }
 
-interface Props extends RouteComponentProps<MatchParams>, PageProps { }
+export interface RefreshUpdateStripeViewProps extends RouteComponentProps<MatchParams>, PageProps { }
 
-export default class RefreshUpdateStripeView extends React.Component<Props> {
+export class RefreshUpdateStripeView extends React.Component<RefreshUpdateStripeViewProps> {
 	async componentDidMount() {
 		const pathStripeUpdateLink: string = userStripeUpdateLinkRESTLink + this.props.match.params.username + '/';
 		const resultStripeUpdateLink: Result<UserStripeUpdateLinkREST, Error> = await resolveGETCall<UserStripeUpdateLinkREST>(pathStripeUpdateLink, true);

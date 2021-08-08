@@ -4,15 +4,15 @@ import { Result } from 'neverthrow';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 
-import HomeView from './components/HomeView';
-import LoginView from './components/LoginView';
-import MediaListView from './components/MediaListView';
-import MediaView from './components/MediaView';
-import ProfileView from './components/ProfileView';
-import CheckoutView from './components/CheckoutView';
-import RefreshOnboardingStripeView from './components/RefreshOnboardingStripeView';
-import RefreshUpdateStripeView from './components/RefreshUpdateStripeView';
-import VerifyProfileView from './components/VerifyProfileView';
+import { HomeView } from './components/HomeView';
+import { LoginView } from './components/LoginView';
+import { MediaListView } from './components/MediaListView';
+import { MediaView } from './components/MediaView';
+import { ProfileView } from './components/ProfileView';
+import { CheckoutView } from './components/CheckoutView';
+import { RefreshOnboardingStripeView } from './components/RefreshOnboardingStripeView';
+import { RefreshUpdateStripeView } from './components/RefreshUpdateStripeView';
+import { VerifyProfileView } from './components/VerifyProfileView';
 
 import { AlertBarUpdater, BasketItem, ItemREST, ItemTypeAvailableREST, itemTypeAvailableRESTLink, ItemTypeREST, PageProps, resolveGETCall, Tokens } from './utils';
 import config from './config';

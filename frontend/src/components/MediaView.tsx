@@ -14,14 +14,14 @@ interface MatchParams {
 	media_id: string
 }
 
-interface Props extends RouteComponentProps<MatchParams>, PageProps { }
+export interface MediaViewProps extends RouteComponentProps<MatchParams>, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export default class MediaView extends React.Component<Props, State> {
-	constructor(props: Props) {
+export class MediaView extends React.Component<MediaViewProps, State> {
+	constructor(props: MediaViewProps) {
 		super(props);
 
 		this.state = {

@@ -7,13 +7,15 @@ import BasePage from './elements/BasePage';
 
 import { UserStripeOnboardingLinkREST, resolveGETCall, PageProps, userStripeOnboardingLinkRESTLink } from '../utils';
 
+import './RefreshOnboardingStripeView.css';
+
 interface MatchParams {
 	username: string
 }
 
-interface Props extends RouteComponentProps<MatchParams>, PageProps { }
+export interface RefreshOnboardingStripeViewProps extends RouteComponentProps<MatchParams>, PageProps { }
 
-export default class RefreshOnboardingStripeView extends React.Component<Props> {
+export class RefreshOnboardingStripeView extends React.Component<RefreshOnboardingStripeViewProps> {
 	async componentDidMount() {
 		const pathStripeOnboardingLink: string = userStripeOnboardingLinkRESTLink + this.props.match.params.username + '/';
 		const resultStripeOnboardingLink: Result<UserStripeOnboardingLinkREST, Error> = await resolveGETCall<UserStripeOnboardingLinkREST>(pathStripeOnboardingLink, true);

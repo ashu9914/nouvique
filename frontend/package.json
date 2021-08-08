@@ -1,5 +1,5 @@
 {
-	"name": "Nouvique",
+	"name": "nouvique",
 	"version": "0.1.0",
 	"private": true,
 	"homepage": "https://nouvique.pythonanywhere.com/static/",
@@ -14,8 +14,10 @@
 		"@types/react": "^17.0.11",
 		"@types/react-bootstrap": "^0.32.26",
 		"@types/react-dom": "^17.0.7",
+		"@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
 		"axios": "^0.21.1",
 		"bootstrap": "^5.0.2",
+		"enzyme": "^3.11.0",
 		"neverthrow": "^4.2.1",
 		"react": "^17.0.2",
 		"react-bootstrap": "^2.0.0-beta.2",
@@ -24,13 +26,14 @@
 		"react-router-bootstrap": "^0.25.0",
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "^4.0.3",
+		"react-test-renderer": "^17.0.2",
 		"typescript": "^4.3.2",
 		"web-vitals": "^1.1.2"
 	},
 	"scripts": {
 		"start": "export REACT_APP_CONFIG=dev || set REACT_APP_CONFIG=dev && react-scripts start",
 		"build": "export REACT_APP_CONFIG=prod || set REACT_APP_CONFIG=prod && react-scripts build && cp -r build/ ../backend/build/",
-		"test": "export REACT_APP_CONFIG=dev || set REACT_APP_CONFIG=dev && react-scripts test --passWithNoTests",
+		"test": "export REACT_APP_CONFIG=dev || set REACT_APP_CONFIG=dev && react-scripts test --silent",
 		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {
@@ -52,7 +55,9 @@
 		]
 	},
 	"devDependencies": {
+		"@types/enzyme": "^3.10.9",
 		"@types/react-router-bootstrap": "^0.24.5",
-		"@types/react-router-dom": "^5.1.7"
+		"@types/react-router-dom": "^5.1.7",
+		"@types/react-test-renderer": "^17.0.1"
 	}
 }
