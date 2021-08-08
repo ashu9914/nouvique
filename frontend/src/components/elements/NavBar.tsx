@@ -26,8 +26,8 @@ export default class NavBar extends React.PureComponent<Props, State> {
 								src={process.env.PUBLIC_URL + '/logo192.png'}
 								className='nav-bar-logo d-inline-block align-top'
 							/>{' '}
-              Nouvique
-            </Navbar.Brand>
+							Nouvique
+						</Navbar.Brand>
 					</LinkContainer>
 
 					<Navbar.Collapse className='justify-content-end'>
@@ -39,7 +39,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 									activeClassName='nav-link active nav-right-side'
 									to={{ pathname: '/' }}>
 									Home
-              </NavLink>
+								</NavLink>
 							</Nav.Item>
 
 							<Nav.Item>
@@ -48,7 +48,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 									activeClassName='nav-link active nav-right-side'
 									to={{ pathname: '/media' }}>
 									Media
-              </NavLink>
+								</NavLink>
 							</Nav.Item>
 
 							<Nav.Item>
@@ -66,7 +66,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 										activeClassName='nav-link active nav-right-side'
 										to={{ pathname: '/login' }}>
 										Profile
-                </NavLink>
+									</NavLink>
 								}
 							</Nav.Item>
 
@@ -81,7 +81,7 @@ export default class NavBar extends React.PureComponent<Props, State> {
 										activeClassName='nav-link active'
 										to={{ pathname: '/login' }}>
 										Login/Signup
-                  </NavLink>
+									</NavLink>
 								</Nav.Item>
 							}
 						</Nav>

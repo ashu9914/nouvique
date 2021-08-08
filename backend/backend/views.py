@@ -1,22 +1,35 @@
 import json
+import pycountry
 import traceback
+import stripe
 
 from django.shortcuts import render
 from django.contrib.auth import authenticate
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from backend.models import User, Item, ItemType
+from backend.models import User, Item, ItemType, Order
 from backend.utils import (
 	get_tokens_for_user,
 	get_public_user_object,
 	get_public_item_object,
 	get_public_itemtype_object,
+	calculate_application_fees,
+	STATUS_CODE_2xx,
 	STATUS_CODE_4xx,
-	STATUS_CODE_2xx
+	STATUS_CODE_5xx
+)
+from backend.settings import (
+	DEPLOYMENT_LINK,
+	STRIPE_SECRET_KEY,
+	STRIPE_SECRET_WEBHOOK_KEY
 )
 
+stripe.api_key = STRIPE_SECRET_KEY
+endpoint_secret = STRIPE_SECRET_WEBHOOK_KEY
 
 ROLE_NAME_TO_CODE = {
 	"role1" : 1,
@@ -36,9 +49,26 @@ class RegisterView(APIView):
 	def post(self, request) :
 		try :
 			req = json.loads(request.body.decode('utf-8'))
-
-			User.objects.create_user(username=req['username'], email=req['email'], password=req['password'], first_name=req['first_name'], last_name=req['last_name'], location_town=req['location_town'], location_country=req['location_country'], location_postcode=req['location_postcode'])
 			
+			accountResponse = stripe.Account.create(
+				type="standard",
+				default_currency='GBP',
+				country=pycountry.countries.get(name=req['location_country'].title()).alpha_2,
+				email=req['email'].lower(),
+			)
+
+			User.objects.create_user(
+				username=req['username'].lower(), 
+				email=req['email'].lower(), 
+				password=req['password'], 
+				first_name=req['first_name'].title(), 
+				last_name=req['last_name'].title(), 
+				location_town=req['location_town'].title(), 
+				location_country=req['location_country'].title(), 
+				location_postcode=req['location_postcode'].upper(), 
+				stripe_account_id=accountResponse.id
+			)
+
 			ret_user = User.objects.get(username=req['username'])
 			
 			tokens = get_tokens_for_user(ret_user)
@@ -82,6 +112,310 @@ class UserGetView(APIView):
 		except Exception :
 			traceback.print_exc()
 			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class UserIsVerifiedView(APIView) :
+	def get(self, request, username) :
+		try :
+			user = User.objects.get(username=username)
+
+			return Response({"verified" : user.verified}, status=STATUS_CODE_2xx.SUCCESS.value)
+
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class UserGetStripeOnboardingView(APIView) :
+	permission_classes = (IsAuthenticated, )
+	
+	def get(self, request, username) :
+		try :
+			user = User.objects.get(username=username)
+
+			account_onboarding_link = stripe.AccountLink.create(
+				account=user.stripe_account_id,
+				refresh_url=(DEPLOYMENT_LINK + '/#/refresh_stripe_onboarding_link/' + user.username),
+				return_url=(DEPLOYMENT_LINK + '/#/verify_profile/' + user.username + '/' + user.stripe_account_id),
+				type='account_onboarding'
+			)
+
+			return Response({ "onboarding_link" : account_onboarding_link.url }, status=STATUS_CODE_2xx.SUCCESS.value)
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class UserGetStripeUpdateView(APIView) :
+	permission_classes = (IsAuthenticated, )
+	
+	def get(self, request, username) :
+		try :
+			user = User.objects.get(username=username)
+
+			account_onboarding_link = stripe.AccountLink.create(
+				account=user.stripe_account_id,
+				refresh_url=(DEPLOYMENT_LINK + '/#/refresh_stripe_update_link/' + user.username),
+				return_url=(DEPLOYMENT_LINK + '/#/profile/' + user.username),
+				type='account_onboarding'
+			)
+
+			return Response({ "update_link" : account_onboarding_link.url }, status=STATUS_CODE_2xx.SUCCESS.value)
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class UserVerifyView(APIView) :
+	permission_classes = (IsAuthenticated, )
+	
+	def get(self, request, username, account_id) :
+		try :
+			user = User.objects.get(username=username)
+
+			if user.stripe_account_id != account_id :
+				return Response({"verified" : False}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+			retrievedAccount = stripe.Account.retrieve(account_id)
+			if "error" in retrievedAccount :
+				return Response({"verified" : False}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+			
+			if "card_payments" not in retrievedAccount["capabilities"] or "transfers" not in retrievedAccount["capabilities"] :
+				return Response({"verified" : False}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+			if retrievedAccount["capabilities"]["card_payments"] != "active" or retrievedAccount["capabilities"]["transfers"] != "active" :
+				return Response({"verified" : False}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+			if "details_submitted" not in retrievedAccount or not retrievedAccount["details_submitted"] :
+				return Response({"verified" : False}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+			if "charges_enabled" not in retrievedAccount or not retrievedAccount["charges_enabled"] :
+				return Response({"verified" : False}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+			user.verified = True
+
+			user.save()
+
+			return Response({ "verified" : True }, status=STATUS_CODE_2xx.SUCCESS.value)
+
+		except Exception:
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class PaymentIntentView(APIView) :
+	permission_classes = (IsAuthenticated, )
+	
+	def post(self, request) :
+		try:
+			req = json.loads(request.body.decode('utf-8'))
+
+			if req["buyer_name"] == "null" or req["buyer_name"] == "" :
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+			buyer = User.objects.get(username=req["buyer_name"])
+
+			# check that request is valid and correct
+			total = 0
+			seller_total = {}
+			for i, req_item in enumerate(req["item_types"]) :
+				quantity_deducted = False
+				
+				try :
+					# try retrieve the specified items so made-up ones aren't being asked for
+					item = Item.objects.get(name=req_item["name"], seller=req_item["seller_name"])
+					seller = User.objects.get(username=req_item["seller_name"])
+					item_type = ItemType.objects.get(id=req_item["type_id"])
+					
+					if not seller.verified :
+						print("Seller cannot sell")
+						return Response({}, status=STATUS_CODE_4xx.FORBIDDEN.value)
+
+					if not item_type.available :
+						print("Item is not available")
+						return Response({}, status=STATUS_CODE_4xx.GONE.value)
+					
+					if item_type.price != req_item["price"] :
+						print("Prices are incorrect")
+						print("\t", item_type.price, " != ", req_item["price"])
+						return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+					if item_type.quantity < int(req_item["quantity"]) :
+						print("Quantity is too great")
+						print("\t", item_type.quantity, " < ", req_item["quantity"])
+						return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+					
+					# remove the item_type's quantity and update availablity
+					item_type.quantity = item_type.quantity - req_item["quantity"]
+					item_type.available = item_type.available and (item_type.quantity > 0)
+
+					item_type.save()
+					quantity_deducted = True
+
+				except Exception :
+					# add removed quantities back onto items
+					traceback.print_exc()
+					for j, req_item in enumerate(req["item_types"]) :
+						if j >= i :
+							break
+						
+						item_type = ItemType.objects.get(id=req_item["type_id"])
+						
+						item_type.quantity = item_type.quantity + req_item["quantity"]
+						item_type.available = item_type.available and (item_type.quantity > 0)
+
+						item_type.save()
+
+					if quantity_deducted :
+						item_type = ItemType.objects.get(id=req_item["type_id"])
+						
+						item_type.quantity = item_type.quantity + req_item["quantity"]
+						item_type.available = item_type.available and (item_type.quantity > 0)
+
+						item_type.save()
+
+					return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+				transaction_price = (req_item["price"] * req_item["quantity"])
+				total += transaction_price
+				
+				if req_item["seller_name"] not in seller_total :
+					seller_total[req_item["seller_name"]] = transaction_price
+				else :
+					seller_total[req_item["seller_name"]] += transaction_price
+
+			# verify total is correct
+			if total != float(req["amount"]) :
+				print("Total was incorrect")
+				print("\t", total, " != ", float(req["amount"]))
+				# add all quantities back
+				for req_item in req["item_types"] :
+					item_type = ItemType.objects.get(id=req_item["type_id"])
+						
+					item_type.quantity = item_type.quantity + req_item["quantity"]
+					item_type.available = item_type.quantity > 0
+
+					item_type.save()
+
+				return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+			# create PaymentIntents for all items
+			payment_intent_client_secrets = []
+			for req_item in req["item_types"] :
+				try:
+					item = Item.objects.get(name=req_item["name"], seller=req_item["seller_name"])
+					item_type = ItemType.objects.get(id=req_item["type_id"])
+					
+					# multiply prices by 100 as stripe takes positive integers in the lowest denomination of the specified currency, i.e amounts are specified in pence
+					payment_intent = stripe.PaymentIntent.create(
+						amount=str(int((req_item["price"]*req_item["quantity"]) * 100)),
+						currency="gbp",
+						payment_method_types=["card"],
+						application_fee_amount=str(calculate_application_fees(seller_total[req_item["seller_name"]], req_item["price"], req_item["quantity"]) * 100),
+						transfer_data={
+							'destination': seller.stripe_account_id,
+						}
+					)
+
+					order = Order.objects.create(
+						stripe_payment_intent_id=payment_intent.id, 
+						stripe_client_secret=payment_intent.client_secret, 
+						item=item,
+						item_type=item_type,
+						quantity=req_item["quantity"],
+						buyer=buyer
+					)
+
+					payment_intent_client_secrets.append(payment_intent.client_secret)
+
+				except Exception:
+					print("Could not handle stripe PaymentIntent and/or order creation")
+					traceback.print_exc()
+					for req_item in req["item_types"] :
+						item_type = ItemType.objects.get(id=req_item["type_id"])
+							
+						item_type.quantity = item_type.quantity + req_item["quantity"]
+						item_type.available = item_type.quantity > 0
+
+						item_type.save()
+
+					return Response({}, status=STATUS_CODE_5xx.INTERNAL_SERVER_ERROR.value)
+					
+			
+			return Response({"client_secrets": payment_intent_client_secrets}, status=STATUS_CODE_2xx.ACCEPTED.value)
+
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_5xx.INTERNAL_SERVER_ERROR.value)
+
+class UndoPaymentIntentView(APIView) :
+	permission_classes = (IsAuthenticated, )
+	
+	def post(self, response) :
+		try:
+			req = json.loads(request.body.decode('utf-8'))
+
+			req_item = req["item_type"]
+
+			item_type = ItemType.objects.get(id=req_item["type_id"])
+							
+			item_type.quantity = item_type.quantity + req_item["quantity"]
+			item_type.available = item_type.quantity > 0
+
+			item_type.save()
+
+			buyer = User.objects.get(username=req["buyer_name"])
+			order = Order.objects.get(
+				stripe_client_secret=req["client_secret"],
+				item_type=item_type,
+				quantity=req_item["quantity"],
+				buyer=buyer
+			)
+
+			order.delete()
+
+			return Response({}, status=STATUS_CODE_2xx.ACCEPTED.value)
+
+		except Exception :
+			traceback.print_exc()
+			return Response({}, status=STATUS_CODE_5xx.INTERNAL_SERVER_ERROR.value)		
+
+class StripePaymentIntentWebhookView(APIView):
+	@method_decorator(csrf_exempt)
+	def post(self, request):
+		try:
+			req = request.body
+			sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+
+			try:
+				event = stripe.Webhook.construct_event(
+					req, sig_header, endpoint_secret
+				)
+			except ValueError as e:
+				# Invalid payload.
+				traceback.print_exc()
+				return Response({}, STATUS_CODE_4xx.BAD_REQUEST.value)
+			except stripe.error.SignatureVerificationError as e:
+				# Invalid Signature.
+				traceback.print_exc()
+				return Response({}, STATUS_CODE_4xx.BAD_REQUEST.value)
+
+			if event["type"] == "payment_intent.succeeded":
+				payment_intent = event["data"]["object"]
+				return handle_successful_payment_intent(payment_intent)
+
+			return Response({}, STATUS_CODE_4xx.BAD_REQUEST.value)
+
+		except Exception :
+			traceback.print_exc()
+			return Response({}, STATUS_CODE_4xx.BAD_REQUEST.value)
+
+def handle_successful_payment_intent(payment_intent):
+	try:
+		order = Order.objects.get(stripe_client_secret=payment_intent.client_secret, stripe_payment_intent_id=payment_intent.id)
+		order.payment_successful = True
+		order.save()
+
+		return Response({"success" : True}, STATUS_CODE_2xx.SUCCESS.value)
+	
+	except Exception :
+		traceback.print_exc()
+		return Response({}, STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class ItemsGetView(APIView):
 	def get(self, request, username):
@@ -192,6 +526,17 @@ class ItemTypeGetView(APIView) :
 			traceback.print_exc()
 			return Response([], status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
+class ItemTypeGetAvailableView(APIView) :
+	def get(self, request, id) :
+		try:
+			itemtype = ItemType.objects.get(id=id)
+
+			return Response({"available": itemtype.available}, status=STATUS_CODE_2xx.SUCCESS.value)
+			
+		except Exception :
+			traceback.print_exc()
+			return Response({"available": False}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
 class ItemTypeSpecificChangeView(APIView) :
 	permission_classes = (IsAuthenticated, )
 
@@ -204,7 +549,7 @@ class ItemTypeSpecificChangeView(APIView) :
 			itemtype.quantity = req["quantity"]
 			itemtype.size = req["size"]
 			itemtype.price = req["price"]
-			itemtype.available = req["available"]
+			itemtype.available = req["available"] and (itemtype.quantity > 0)
 			
 			itemtype.save()
 			
@@ -236,7 +581,13 @@ class ItemTypeSpecificCreateView(APIView):
 			user = User.objects.get(username=username)
 			item = Item.objects.get(seller=user, name=name)
 
-			itemtype = ItemType.objects.create(item=item, quantity=req["quantity"], size=req["size"], price=req["price"], available=req["available"])
+			itemtype = ItemType.objects.create(
+				item=item, 
+				quantity=req["quantity"], 
+				size=req["size"], 
+				price=req["price"], 
+				available=req["available"]
+			)
 
 			itemtype.save()
 
@@ -253,8 +604,6 @@ class UserChangeView(APIView):
 	def put(self, request, username):
 		try :
 			req = json.loads(request.body.decode('utf-8'))
-
-			print(req)
 
 			user = User.objects.get(username=username)
 			user.first_name = req["first_name"]

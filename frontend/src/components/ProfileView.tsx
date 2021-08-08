@@ -5,7 +5,7 @@ import { Result } from 'neverthrow';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { UserRESTSubmit, UserREST, UserRESTKeys, Tokens, PageProps, resolveGETCall, resolvePUTCall } from '../utils';
+import { UserRESTSubmit, UserREST, UserRESTKeys, UserStripeUpdateLinkREST, UserStripeOnboardingLinkREST, Tokens, PageProps, resolveGETCall, resolvePUTCall, userStripeOnboardingLinkRESTLink, userRESTLink, userStripeUpdateLinkRESTLink, itemsListRESTLink, ItemRESTList, ItemTypeRESTList, itemTypeListRESTLink, userRESTSubmitLink } from '../utils';
 
 import BasePage from './elements/BasePage';
 
@@ -21,7 +21,9 @@ interface State {
 	user: UserREST,
 	form: UserRESTSubmit,
 	isUser: boolean,
-	submit_error: boolean
+	submit_error: boolean,
+	onboarding_link: string
+	update_link: string
 }
 
 export default class ProfileView extends React.Component<Props, State> {
@@ -36,7 +38,8 @@ export default class ProfileView extends React.Component<Props, State> {
 				location_town: "",
 				location_country: "",
 				location_postcode: "",
-				bio: ""
+				bio: "",
+				verified: false
 			},
 			form: {
 				first_name: "",
@@ -48,12 +51,14 @@ export default class ProfileView extends React.Component<Props, State> {
 				bio: ""
 			},
 			submit_error: false,
-			isUser: localStorage.getItem("username") === this.props.match.params.username
+			isUser: localStorage.getItem("username") === this.props.match.params.username,
+			onboarding_link: "",
+			update_link: ""
 		};
 	}
 
 	async componentDidMount() {
-		const path: string = '/getuser/' + this.props.match.params.username + '/';
+		const path: string = userRESTLink + this.props.match.params.username + '/';
 		const result: Result<UserREST, Error> = await resolveGETCall<UserREST>(path);
 
 		result
@@ -64,11 +69,81 @@ export default class ProfileView extends React.Component<Props, State> {
 			})
 			.mapErr(err => {
 				console.error(err);
+				this.props.updateAlertBar("User does not exist. Do you want this account?", "warning", true);
+				this.props.history.push('/login');
+			});
+
+		if (this.state.isUser) {
+			if (!this.state.user.verified) {
+				const pathStripeOnboardingLink: string = userStripeOnboardingLinkRESTLink + this.props.match.params.username + '/';
+				const resultStripeOnboardingLink: Result<UserStripeOnboardingLinkREST, Error> = await resolveGETCall<UserStripeOnboardingLinkREST>(pathStripeOnboardingLink, true);
+
+				resultStripeOnboardingLink
+					.map(res => {
+						this.setState({ onboarding_link: res.onboarding_link });
+
+						return null; // necessary to silence warning
+					})
+					.mapErr(err => {
+						// cannot be authenticated with the user therefore, jwt tokens must not be correct, therefore, deny form access
+						this.setState({ isUser: false });
+
+						console.error(err);
+					});
+			} else {
+				const pathStripeUpdateLink: string = userStripeUpdateLinkRESTLink + this.props.match.params.username + '/';
+				const resultStripeUpdateLink: Result<UserStripeUpdateLinkREST, Error> = await resolveGETCall<UserStripeUpdateLinkREST>(pathStripeUpdateLink, true);
+
+				resultStripeUpdateLink
+					.map(res => {
+						this.setState({ update_link: res.update_link });
+
+						return null; // necessary to silence warning
+					})
+					.mapErr(err => {
+						// cannot be authenticated with the user therefore, jwt tokens must not be correct, therefore, deny form access
+						this.setState({ isUser: false });
+
+						console.error(err);
+					});
+			}
+		}
+
+		// TODO: comment everything below this out
+		const itemsPath: string = itemsListRESTLink + this.props.match.params.username + '/';
+		const itemResult: Result<ItemRESTList, Error> = await resolveGETCall<ItemRESTList>(itemsPath);
+
+		itemResult
+			.map(res => {
+				for (var i: number = 0; i < res.length; ++i) {
+					const index: number = i;
+					const itemTypePath: string = itemTypeListRESTLink + this.props.match.params.username + '/' + res[i].name + '/';
+					resolveGETCall<ItemTypeRESTList>(itemTypePath)
+						.then(itemTypeResult => {
+							this.props.emptyBasket(); // only adds itemtypes of one item
+
+							itemTypeResult
+								.map(resType => {
+									for (var i: number = 0; i < resType.length; ++i) {
+										this.props.addToBasket(res[index], resType[i]);
+									}
+									return null;
+								})
+								.mapErr(err => {
+									console.error(err);
+								})
+						});
+				}
+
+				return null; // necessary to silence warning
+			})
+			.mapErr(err => {
+				console.error(err);
 			});
 	}
 
 	handleChangeSubmit = async () => {
-		const path = '/user/' + this.props.match.params.username + '/';
+		const path = userRESTSubmitLink + this.props.match.params.username + '/';
 
 		const result: Result<UserREST, Error> = await resolvePUTCall<UserREST, UserRESTSubmit>(path, this.state.form, true);
 
@@ -161,6 +236,9 @@ export default class ProfileView extends React.Component<Props, State> {
 						<Col>
 							<h1>
 								{this.state.user.first_name} {this.state.user.last_name}'s Profile
+								{this.state.user.verified &&
+									<FaCheck />
+								}
 							</h1>
 						</Col>
 						{this.state.isUser &&
@@ -323,6 +401,36 @@ export default class ProfileView extends React.Component<Props, State> {
 										</Button>
 									</InputGroup>
 								</Form>
+							</Row>
+							<Row>
+								{(this.state.onboarding_link !== "" && !this.state.user.verified) &&
+									<React.Fragment>
+										<Form.Label>Get Verified</Form.Label>
+										<InputGroup>
+											<a
+												target="_blank"
+												rel="noreferrer"
+												href={this.state.onboarding_link}
+												className="stripe-connect">
+												<span>Connect with</span>
+											</a>
+										</InputGroup>
+									</React.Fragment>
+								}
+								{this.state.update_link !== "" &&
+									<React.Fragment>
+										<Form.Label>Update Payment Information</Form.Label>
+										<InputGroup>
+											<a
+												target="_blank"
+												rel="noreferrer"
+												href={this.state.update_link}
+												className="stripe-connect">
+												<span>Update with</span>
+											</a>
+										</InputGroup>
+									</React.Fragment>
+								}
 							</Row>
 						</React.Fragment>
 					}

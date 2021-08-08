@@ -4,15 +4,11 @@ import { Result } from 'neverthrow';
 import { Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { PageProps, resolveGETCall } from '../utils';
+import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
 import './MediaListView.css';
-
-interface ApiTest {
-	blah: string
-}
 
 interface Props extends RouteComponentProps, PageProps { }
 
@@ -32,7 +28,7 @@ export default class MediaListView extends React.Component<Props, State> {
 	}
 
 	async componentDidMount() {
-		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>('/');
+		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>(apiTestLink);
 
 		result
 			.map(res => {
