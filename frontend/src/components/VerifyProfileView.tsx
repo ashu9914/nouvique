@@ -7,16 +7,18 @@ import BasePage from './elements/BasePage';
 
 import { resolveGETCall, PageProps, UserVerifyREST, verifyUserRESTLink } from '../utils';
 
+import './VerifyProfileView.css';
+
 interface MatchParams {
 	username: string,
 	account_id: string
 }
 
-interface Props extends RouteComponentProps<MatchParams>, PageProps { }
+export interface VerifyProfileViewProps extends RouteComponentProps<MatchParams>, PageProps { }
 
 const UNABLE_TO_VERIFY_MESSAGE: string = "Unable to verify account. Please make sure that you have created and completed your Stripe account creation, including submitting all necessary documents and details. You can update your stripe account via your profile settings. If you have verified this, try re-logging in and retrying.";
 
-export default class VerifyProfileView extends React.Component<Props> {
+export class VerifyProfileView extends React.Component<VerifyProfileViewProps> {
 	async componentDidMount() {
 		const path: string = verifyUserRESTLink + this.props.match.params.username + '/' + this.props.match.params.account_id + '/';
 		const result: Result<UserVerifyREST, Error> = await resolveGETCall<UserVerifyREST>(path, true);

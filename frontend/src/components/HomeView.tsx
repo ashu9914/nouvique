@@ -10,14 +10,14 @@ import BasePage from './elements/BasePage';
 
 import './HomeView.css';
 
-interface Props extends RouteComponentProps, PageProps { }
+export interface HomeViewProps extends RouteComponentProps, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export default class HomeView extends React.Component<Props, State> {
-	constructor(props: Props) {
+export class HomeView extends React.Component<HomeViewProps, State> {
+	constructor(props: HomeViewProps) {
 		super(props);
 
 		this.state = {

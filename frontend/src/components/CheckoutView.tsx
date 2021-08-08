@@ -12,15 +12,15 @@ import InjectedCheckoutForm from './elements/NouviqueStripeCheckoutForm';
 
 import './CheckoutView.css';
 
-interface Props extends RouteComponentProps, PageProps { }
+export interface CheckoutViewProps extends RouteComponentProps, PageProps { }
 
 interface State {
 	basketItems: BasketItem[],
 	totalValue: number
 }
 
-export default class CheckoutView extends React.Component<Props, State> {
-	constructor(props: Props) {
+export class CheckoutView extends React.Component<CheckoutViewProps, State> {
+	constructor(props: CheckoutViewProps) {
 		super(props);
 
 		this.state = {

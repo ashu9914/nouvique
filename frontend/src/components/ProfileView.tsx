@@ -15,7 +15,7 @@ interface MatchParams {
 	username: string
 }
 
-interface Props extends RouteComponentProps<MatchParams>, PageProps { }
+export interface ProfileViewProps extends RouteComponentProps<MatchParams>, PageProps { }
 
 interface State {
 	user: UserREST,
@@ -26,8 +26,8 @@ interface State {
 	update_link: string
 }
 
-export default class ProfileView extends React.Component<Props, State> {
-	constructor(props: Props) {
+export class ProfileView extends React.Component<ProfileViewProps, State> {
+	constructor(props: ProfileViewProps) {
 		super(props);
 
 		this.state = {

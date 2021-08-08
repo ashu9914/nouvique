@@ -11,14 +11,14 @@ import LoginForm from './elements/CredentialForm';
 
 import './LoginView.css';
 
-interface Props extends RouteComponentProps, PageProps { }
+export interface LoginViewProps extends RouteComponentProps, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export default class LoginView extends React.Component<Props, State> {
-	constructor(props: Props) {
+export class LoginView extends React.Component<LoginViewProps, State> {
+	constructor(props: LoginViewProps) {
 		super(props);
 
 		this.state = {
