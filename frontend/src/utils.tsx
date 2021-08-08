@@ -1,7 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
 import { ok, err, Result } from 'neverthrow';
+import { Stripe } from '@stripe/stripe-js';
 
 import config from './config';
+
+export const apiTestLink: string = '/';
+export interface ApiTest {
+	blah: string
+}
 
 interface AuthenticationHeaders {
 	headers: {
@@ -17,7 +23,14 @@ export interface AlertBarUpdater {
 
 export interface PageProps {
 	updateAlertBar: (message: string, variant: string, show: boolean) => Promise<void>,
-	alert: AlertBarUpdater
+	emptyBasket: () => void,
+	addToBasket: (item: ItemREST, itemType: ItemTypeREST) => void,
+	removeFromBasket: (index: number) => void,
+	getBasketItems: () => BasketItem[],
+	checkBasketAvailabilities: () => Promise<void>,
+	getTotalBasketPrice: () => number,
+	stripePromise: Promise<Stripe | null>,
+	alert: AlertBarUpdater,
 }
 
 export interface Tokens {
@@ -30,11 +43,14 @@ export interface LStorage {
 	username: string
 }
 
+export const registrationRESTLink: string = '/auth/register/';
+export const loginRESTLink: string = '/auth/login/';
 export interface TokenREST {
 	username: string,
 	tokens: Tokens
 }
 
+export const userRESTLink: string = '/get_user/';
 export interface UserREST {
 	first_name: string,
 	last_name: string,
@@ -42,9 +58,9 @@ export interface UserREST {
 	location_town: string,
 	location_country: string,
 	location_postcode: string,
-	bio: string
+	bio: string,
+	verified: boolean
 }
-
 export type UserRESTKeys = "email" | "first_name" | "last_name" | "location_town" | "location_country" | "location_postcode" | "bio";
 
 export interface RegistrationRESTSubmit {
@@ -58,6 +74,7 @@ export interface RegistrationRESTSubmit {
 	location_postcode: string,
 }
 
+export const userRESTSubmitLink: string = '/user/';
 export interface UserRESTSubmit {
 	first_name: string,
 	last_name: string,
@@ -89,6 +106,8 @@ export interface ItemREST {
 	tag3: string,
 	tag4: string
 }
+export const itemsListRESTLink: string = '/get_items/';
+export type ItemRESTList = ItemREST[];
 
 export interface ItemRESTSubmit {
 	bio: string,
@@ -128,9 +147,78 @@ export interface ItemTypeREST {
 	size: string,
 	available: boolean
 }
+export const itemTypeListRESTLink = '/get_item_types/';
+export type ItemTypeRESTList = ItemTypeREST[];
 
 export type ItemTypeRESTNewSubmitKeys = "price" | "quantity" | "available" | "size";
 export type ItemTypeRESTChangeSubmitKeys = "price" | "quantity" | "available" | "size";
+
+export const itemTypeAvailableRESTLink: string = '/item_type_is_available/';
+export interface ItemTypeAvailableREST {
+	available: boolean
+}
+
+export interface BasketItem {
+	price: number,
+	size: string,
+	name: string,
+	seller_name: string,
+	shape: string,
+	colour: string,
+	type_id: string,
+	quantity: number,
+	available: boolean
+}
+
+export const stripePaymentIntentRESTLink = '/payment_intents/';
+export interface StripePaymentIntentRESTSubmit {
+	amount: number,
+	item_types: BasketItem[],
+	buyer_name: string
+}
+export interface StripePaymentIntentREST {
+	client_secrets: string[]
+}
+
+export const stripeUndoPaymentIntentRESTLink = '/undo_payment_intent/';
+export interface StripeUndoPaymentIntentRESTSubmit {
+	client_secret: string,
+	item_type: BasketItem,
+	buyer_name: string
+}
+export interface StripeUndoPaymentIntentREST { }
+
+export const userStripeUpdateLinkRESTLink: string = '/get_user_stripe_update_link/';
+export interface UserStripeUpdateLinkREST {
+	update_link: string
+}
+
+export const userStripeOnboardingLinkRESTLink: string = '/get_user_stripe_onboarding_link/';
+export interface UserStripeOnboardingLinkREST {
+	onboarding_link: string
+}
+
+export const verifyUserRESTLink: string = '/verify_user/';
+export interface UserVerifyREST {
+	verified: boolean
+}
+
+export function getActualPriceString(price: number, quantity: number): string {
+	return (Math.round((price * quantity) * 100) / 100).toFixed(2)
+}
+
+export const orderListRESTLink = '/orders/';
+export interface OrderREST {
+	item: string,
+	item_type: number,
+	quantity: number,
+	purchase_date: string,
+	payment_successful: boolean,
+	shipped: boolean,
+	arrived: boolean,
+	shipping_tag: string
+}
+export type OrderListREST = OrderREST[];
 
 async function getNewAccessToken(): Promise<boolean> {
 	try {

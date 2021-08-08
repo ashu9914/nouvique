@@ -1,0 +1,11 @@
+.bottom-border {
+	border-bottom: 1px solid darkgrey;
+	padding-bottom: .2rem;
+	margin-bottom: .3rem;
+}
+
+.bottom-border:last-of-type {
+	border-bottom: 0;
+	padding-bottom: 0;
+	margin-bottom: 0;
+}

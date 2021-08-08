@@ -4,15 +4,11 @@ import { Result } from 'neverthrow';
 import { Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { PageProps, resolveGETCall } from '../utils';
+import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
 import './MediaView.css';
-
-interface ApiTest {
-	blah: string
-}
 
 interface MatchParams {
 	media_id: string
@@ -36,7 +32,7 @@ export default class MediaView extends React.Component<Props, State> {
 	}
 
 	async componentDidMount() {
-		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>('/');
+		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>(apiTestLink);
 
 		result
 			.map(res => {

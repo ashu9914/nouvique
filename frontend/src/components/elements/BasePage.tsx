@@ -14,6 +14,9 @@ export default class BasePage extends React.PureComponent<Props, State> {
 	// constructor(props: Props) {
 	//   super(props);
 	// }
+	async componentDidMount() {
+		this.props.checkBasketAvailabilities();
+	}
 
 	render() {
 		return (
