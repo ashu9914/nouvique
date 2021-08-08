@@ -207,6 +207,19 @@ export function getActualPriceString(price: number, quantity: number): string {
 	return (Math.round((price * quantity) * 100) / 100).toFixed(2)
 }
 
+export const orderListRESTLink = '/orders/';
+export interface OrderREST {
+	item: string,
+	item_type: number,
+	quantity: number,
+	purchase_date: string,
+	payment_successful: boolean,
+	shipped: boolean,
+	arrived: boolean,
+	shipping_tag: string
+}
+export type OrderListREST = OrderREST[];
+
 async function getNewAccessToken(): Promise<boolean> {
 	try {
 		const tokens: Tokens = JSON.parse(localStorage.tokens);

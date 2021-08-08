@@ -17,6 +17,7 @@ from backend.utils import (
 	get_public_user_object,
 	get_public_item_object,
 	get_public_itemtype_object,
+	get_private_order_object,
 	calculate_application_fees,
 	STATUS_CODE_2xx,
 	STATUS_CODE_4xx,
@@ -416,6 +417,22 @@ def handle_successful_payment_intent(payment_intent):
 	except Exception :
 		traceback.print_exc()
 		return Response({}, STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class OrderGetView(APIView) :
+	permission_classes = (IsAuthenticated, )
+
+	def get(self, request, username) :
+		try:
+			orders = Order.objects.filter(buyer_name=username).order_by('-purchase_date')
+			l = []
+			for o in orders:
+				l.append(get_private_order_object(o))
+
+			return Response(l, status=STATUS_CODE_2xx.SUCCESS.value)
+
+		except Exception:
+			traceback.print_exc()
+			return Response([], STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class ItemsGetView(APIView):
 	def get(self, request, username):

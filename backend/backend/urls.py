@@ -52,5 +52,7 @@ urlpatterns = [
 	path(NAMESPACE + '/payment_intents/', views.PaymentIntentView.as_view()),
 	path(NAMESPACE + '/undo_payment_intent/', views.UndoPaymentIntentView.as_view()),
 
+	path(NAMESPACE + '/orders/<str:username>/', views.OrderGetView.as_view()),
+
 	path(NAMESPACE + '/stripe_webhook/', views.StripePaymentIntentWebhookView.as_view()),
 ] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

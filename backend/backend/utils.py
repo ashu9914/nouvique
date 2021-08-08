@@ -81,3 +81,15 @@ def get_public_itemtype_object(itemtype) :
 		"price" : itemtype.price,
 		"available" : itemtype.available
 	}
+
+def get_private_order_object(order) :
+	return {
+		"item" : order.item.name,
+		"item_type" : order.item_type.id,
+		"quantity": order.quantity,
+		"purchase_date": order.purchase_date,
+		"payment_successful": order.payment_successful,
+		"shipped": order.shipped,
+		"arrived": order.arrived,
+		"shipping_tag" : order.shipping_tag
+	}
