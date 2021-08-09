@@ -3,8 +3,8 @@
 exports[`HomeView Should render correctly with mount 1`] = `
 "<MemoryRouter>
   <Router history={{...}}>
-    <HomeView history={{...}} location={{...}} match={{...}} updateAlertBar={{...}} emptyBasket={{...}} addToBasket={{...}} removeFromBasket={{...}} getBasketItems={{...}} getTotalBasketPrice={{...}} checkBasketAvailabilities={{...}} stripePromise={{...}} alert={{...}}>
-      <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={{...}} emptyBasket={{...}} addToBasket={{...}} removeFromBasket={{...}} getBasketItems={{...}} getTotalBasketPrice={{...}} checkBasketAvailabilities={{...}} stripePromise={{...}} alert={{...}}>
+    <HomeView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
+      <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
         <NavBar>
           <Navbar bg=\\"transparent\\" variant=\\"light\\" expand={true} collapseOnSelect={false}>
             <nav className=\\"navbar navbar-expand navbar-light bg-transparent\\">
@@ -93,7 +93,7 @@ exports[`HomeView Should render correctly with mount 1`] = `
           </Navbar>
         </NavBar>
         <div className=\\"mainbody\\">
-          <AlertBar history={{...}} location={{...}} match={{...}} updateAlertBar={{...}} emptyBasket={{...}} addToBasket={{...}} removeFromBasket={{...}} getBasketItems={{...}} getTotalBasketPrice={{...}} checkBasketAvailabilities={{...}} stripePromise={{...}} alert={{...}}>
+          <AlertBar history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
             <Alert show={true} variant={[undefined]} onClose={[Function (anonymous)]} dismissible={true} transition={{...}} closeLabel=\\"Close alert\\">
               <Fade unmountOnExit={true} in={true} timeout={300} mountOnEnter={false} appear={false}>
                 <ForwardRef addEndListener={[Function: transitionEndListener]} unmountOnExit={true} in={true} timeout={300} mountOnEnter={false} appear={false} onEnter={[Function (anonymous)]} childRef={{...}}>
@@ -129,7 +129,7 @@ exports[`HomeView Should render correctly with mount 1`] = `
 
 exports[`HomeView Should render correctly with shallow 1`] = `
 "<Fragment>
-  <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={{...}} emptyBasket={{...}} addToBasket={{...}} removeFromBasket={{...}} getBasketItems={{...}} getTotalBasketPrice={{...}} checkBasketAvailabilities={{...}} stripePromise={{...}} alert={{...}}>
+  <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
     <Row>
       <h1>
         Home

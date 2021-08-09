@@ -4,6 +4,7 @@ import { mount, shallow } from 'enzyme';
 
 import { LoginView, LoginViewProps } from './LoginView';
 import { MemoryRouter as Router } from 'react-router';
+import { loadStripe } from '@stripe/stripe-js';
 
 describe('LoginView', () => {
 	const getProps = (): LoginViewProps => (
@@ -11,14 +12,14 @@ describe('LoginView', () => {
 			history: {} as any,
 			location: {} as any,
 			match: {} as any,
-			updateAlertBar: {} as any,
-			emptyBasket: {} as any,
-			addToBasket: {} as any,
-			removeFromBasket: {} as any,
-			getBasketItems: {} as any,
-			getTotalBasketPrice: {} as any,
-			checkBasketAvailabilities: {} as any,
-			stripePromise: {} as any,
+			updateAlertBar: async () => { },
+			emptyBasket: () => { },
+			addToBasket: () => { },
+			removeFromBasket: () => { },
+			getBasketItems: () => [],
+			getTotalBasketPrice: () => 0,
+			checkBasketAvailabilities: async () => { },
+			stripePromise: loadStripe("foo"),
 			alert: {} as any
 		}
 	)

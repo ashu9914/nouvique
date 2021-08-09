@@ -12,14 +12,14 @@ describe('CheckoutView', () => {
 			history: {} as any,
 			location: {} as any,
 			match: {} as any,
-			updateAlertBar: {} as any,
-			emptyBasket: {} as any,
-			addToBasket: {} as any,
-			removeFromBasket: {} as any,
+			updateAlertBar: async () => { },
+			emptyBasket: () => { },
+			addToBasket: () => { },
+			removeFromBasket: () => { },
 			getBasketItems: () => [],
 			getTotalBasketPrice: () => 0,
-			checkBasketAvailabilities: {} as any,
-			stripePromise: loadStripe("foo") as any,
+			checkBasketAvailabilities: async () => { },
+			stripePromise: loadStripe("foo"),
 			alert: {} as any
 		}
 	)
