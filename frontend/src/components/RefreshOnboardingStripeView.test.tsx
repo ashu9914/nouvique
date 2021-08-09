@@ -4,21 +4,22 @@ import { mount, shallow } from 'enzyme';
 
 import { RefreshOnboardingStripeView, RefreshOnboardingStripeViewProps } from './RefreshOnboardingStripeView';
 import { MemoryRouter as Router } from 'react-router';
+import { loadStripe } from '@stripe/stripe-js';
 
 describe('RefreshOnboardingStripeView', () => {
 	const getProps = (): RefreshOnboardingStripeViewProps => (
 		{
-			history: {} as any,
+			history: { push: () => { } } as any,
 			location: {} as any,
-			match: {} as any,
-			updateAlertBar: {} as any,
-			emptyBasket: {} as any,
-			addToBasket: {} as any,
-			removeFromBasket: {} as any,
-			getBasketItems: {} as any,
-			getTotalBasketPrice: {} as any,
-			checkBasketAvailabilities: {} as any,
-			stripePromise: {} as any,
+			match: { params: { username: "foo" } as any } as any,
+			updateAlertBar: async () => { },
+			emptyBasket: () => { },
+			addToBasket: () => { },
+			removeFromBasket: () => { },
+			getBasketItems: () => [],
+			getTotalBasketPrice: () => 0,
+			checkBasketAvailabilities: async () => { },
+			stripePromise: loadStripe("foo"),
 			alert: {} as any
 		}
 	)

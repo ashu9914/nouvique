@@ -4,6 +4,7 @@ import { mount, shallow } from 'enzyme';
 
 import { MediaView, MediaViewProps } from './MediaView';
 import { MemoryRouter as Router } from 'react-router';
+import { loadStripe } from '@stripe/stripe-js';
 
 describe('MediaView', () => {
 	const getProps = (): MediaViewProps => (
@@ -11,14 +12,14 @@ describe('MediaView', () => {
 			history: {} as any,
 			location: {} as any,
 			match: { params: { media_id: "foo" } as any } as any,
-			updateAlertBar: {} as any,
-			emptyBasket: {} as any,
-			addToBasket: {} as any,
-			removeFromBasket: {} as any,
-			getBasketItems: {} as any,
-			getTotalBasketPrice: {} as any,
-			checkBasketAvailabilities: {} as any,
-			stripePromise: {} as any,
+			updateAlertBar: async () => { },
+			emptyBasket: () => { },
+			addToBasket: () => { },
+			removeFromBasket: () => { },
+			getBasketItems: () => [],
+			getTotalBasketPrice: () => 0,
+			checkBasketAvailabilities: async () => { },
+			stripePromise: loadStripe("foo"),
 			alert: {} as any
 		}
 	)
