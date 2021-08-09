@@ -9,7 +9,7 @@ import { loadStripe } from '@stripe/stripe-js';
 describe('ProfileView', () => {
 	const getProps = (): ProfileViewProps => (
 		{
-			history: {} as any,
+			history: { push: () => { } } as any,
 			location: {} as any,
 			match: { params: { username: "foo" } as any } as any,
 			updateAlertBar: async () => { },
