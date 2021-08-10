@@ -130,6 +130,9 @@ class UserGetStripeOnboardingView(APIView) :
 	
 	def get(self, request, username) :
 		try :
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			user = User.objects.get(username=username)
 
 			account_onboarding_link = stripe.AccountLink.create(
@@ -149,6 +152,9 @@ class UserGetStripeUpdateView(APIView) :
 	
 	def get(self, request, username) :
 		try :
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			user = User.objects.get(username=username)
 
 			account_onboarding_link = stripe.AccountLink.create(
@@ -168,6 +174,9 @@ class UserVerifyView(APIView) :
 	
 	def get(self, request, username, account_id) :
 		try :
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			user = User.objects.get(username=username)
 
 			if user.stripe_account_id != account_id :
@@ -204,6 +213,9 @@ class PaymentIntentView(APIView) :
 	
 	def post(self, request) :
 		try:
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			req = json.loads(request.body.decode('utf-8'))
 
 			if req["buyer_name"] == "null" or req["buyer_name"] == "" :
@@ -308,7 +320,8 @@ class PaymentIntentView(APIView) :
 						item=item,
 						item_type=item_type,
 						quantity=req_item["quantity"],
-						buyer=buyer
+						buyer=buyer,
+						total=int((req_item["price"]*req_item["quantity"]) * 100)
 					)
 
 					payment_intent_client_secrets.append(payment_intent.client_secret)
@@ -338,6 +351,9 @@ class UndoPaymentIntentView(APIView) :
 	
 	def post(self, response) :
 		try:
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			req = json.loads(request.body.decode('utf-8'))
 
 			req_item = req["item_type"]
@@ -407,14 +423,23 @@ def handle_successful_payment_intent(payment_intent):
 		traceback.print_exc()
 		return Response({}, STATUS_CODE_4xx.BAD_REQUEST.value)
 
-class OrderGetView(APIView) :
+class OrdersGetView(APIView) :
 	permission_classes = (IsAuthenticated, )
 
 	def get(self, request, username) :
 		try:
-			orders = Order.objects.filter(buyer_name=username).order_by('-purchase_date')
+			if request.user.username != username :
+				return Response([], status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			l = []
-			for o in orders:
+
+			sold_orders = Order.objects.filter(item__seller__username=username).order_by('-purchase_date')
+			for o in sold_orders :
+				l.append(get_private_order_object(o))
+			
+			buyer = User.objects.get(username=username)
+			bought_orders = Order.objects.filter(buyer=buyer).order_by('-purchase_date')
+			for o in bought_orders :
 				l.append(get_private_order_object(o))
 
 			return Response(l, status=STATUS_CODE_2xx.SUCCESS.value)
@@ -422,6 +447,62 @@ class OrderGetView(APIView) :
 		except Exception:
 			traceback.print_exc()
 			return Response([], STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class OrdersWithUserGetView(APIView) :
+	permission_classes = (IsAuthenticated, )
+
+	def get(self, request, seller_username, buyer_username) :
+		try:
+			if request.user.username != buyer_username:
+				return Response([], status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+				
+			buyer = User.objects.get(username=buyer_username)
+			orders = Order.objects.filter(buyer=buyer).order_by('-purchase_date')
+
+			l = []
+			for o in orders:
+				if o.item.seller.username == seller_username :
+					l.append(get_private_order_object(o))
+
+			return Response(l, status=STATUS_CODE_2xx.SUCCESS.value)
+
+		except Exception:
+			traceback.print_exc()
+			return Response([], STATUS_CODE_4xx.BAD_REQUEST.value)
+
+class OrderSpecificChangeView(APIView) :
+	permission_classes = (IsAuthenticated, )
+	
+	def post(self, request, id) :
+		try:
+			req = json.loads(request.body.decode('utf-8'))
+
+			order = Order.objects.get(id=id)
+
+			if "shipped" in req :
+				order.shipping_tag = req["shipping_tag"]
+
+				if request.user.username != order.item.seller.username :
+					return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+				if req["shipped"] and order.shipping_tag == "" :
+					return Response({}, status=STATUS_CODE_4xx.BAD_REQUEST.value)
+
+				order.shipped = req["shipped"]
+				
+			else :
+				if request.user.username != order.buyer.username :
+					return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
+				order.arrived = req["arrived"]
+
+			order.save()
+
+			return Response(get_private_order_object(order), status=STATUS_CODE_2xx.ACCEPTED.value)
+
+		except Exception :
+			traceback.print_exc()
+			return Response([], status=STATUS_CODE_4xx.BAD_REQUEST.value)
 
 class ItemsGetView(APIView):
 	def get(self, request, username):
@@ -454,6 +535,9 @@ class ItemSpecificChangeView(APIView):
 
 	def put(self, request, username, name):
 		try :
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			req = json.loads(request.body.decode('utf-8'))
 
 			user = User.objects.get(username=username)
@@ -552,6 +636,9 @@ class ItemTypeSpecificChangeView(APIView) :
 
 			itemtype = ItemType.objects.get(id=id)
 
+			if request.user.username != itemtype.item.seller.username :
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			itemtype.quantity = req["quantity"]
 			itemtype.size = req["size"]
 			itemtype.price = req["price"]
@@ -582,6 +669,9 @@ class ItemTypeSpecificCreateView(APIView):
 	
 	def post(self, request, username, name) :
 		try :
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			req = json.loads(request.body.decode('utf-8'))
 
 			user = User.objects.get(username=username)
@@ -609,6 +699,9 @@ class UserChangeView(APIView):
 
 	def put(self, request, username):
 		try :
+			if request.user.username != username:
+				return Response({}, status=STATUS_CODE_4xx.UNAUTHORIZED.value)
+
 			req = json.loads(request.body.decode('utf-8'))
 
 			user = User.objects.get(username=username)
