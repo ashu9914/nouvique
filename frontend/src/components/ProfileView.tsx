@@ -388,6 +388,18 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 											</Row>
 											<Row>
 												<Col>
+													Bought by:
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														<Link to={'/profile/' + order.buyer}>
+															{order.buyer}
+														</Link>
+													</div>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
 													{order.item_bio}
 												</Col>
 											</Row>
