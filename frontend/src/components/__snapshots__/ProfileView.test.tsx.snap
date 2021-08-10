@@ -4,6 +4,9 @@ exports[`ProfileView Should render correctly with mount 1`] = `
 "<MemoryRouter>
   <Router history={{...}}>
     <ProfileView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
+      <Offcanvas show={false} onHide={[Function (anonymous)]} placement=\\"end\\" scroll={true} backdrop={false} keyboard={true} autoFocus={true} enforceFocus={true} restoreFocus={true}>
+        <Modal show={false} backdrop={false} container={[undefined]} keyboard={true} autoFocus={true} enforceFocus={true} restoreFocus={true} restoreFocusOptions={[undefined]} onEscapeKeyDown={[undefined]} onShow={[undefined]} onHide={[Function (anonymous)]} onEnter={[Function: handleEnter]} onEntering={[undefined]} onEntered={[undefined]} onExit={[undefined]} onExiting={[undefined]} onExited={[Function: handleExited]} manager={{...}} containerClassName=\\"offcanvas-open\\" transition={[Function: DialogTransition]} backdropTransition={[Function: BackdropTransition]} renderBackdrop={[Function (anonymous)]} renderDialog={[Function: renderDialog]} />
+      </Offcanvas>
       <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
         <NavBar>
           <Navbar bg=\\"transparent\\" variant=\\"light\\" expand={true} collapseOnSelect={false}>
@@ -118,6 +121,13 @@ exports[`ProfileView Should render correctly with mount 1`] = `
                   </h1>
                 </div>
               </Col>
+              <Col>
+                <div className=\\"col\\">
+                  <ButtonGroup style={{...}} vertical={false} role=\\"group\\">
+                    <div style={{...}} role=\\"group\\" className=\\"btn-group\\" />
+                  </ButtonGroup>
+                </div>
+              </Col>
             </div>
           </Row>
           <Row>
@@ -158,6 +168,14 @@ exports[`ProfileView Should render correctly with mount 1`] = `
 
 exports[`ProfileView Should render correctly with shallow 1`] = `
 "<Fragment>
+  <Offcanvas show={false} onHide={[Function (anonymous)]} placement=\\"end\\" scroll={true} backdrop={false} keyboard={true} autoFocus={true} enforceFocus={true} restoreFocus={true}>
+    <OffcanvasHeader closeButton={true} closeLabel=\\"Close\\">
+      <OffcanvasTitle>
+        Orders
+      </OffcanvasTitle>
+    </OffcanvasHeader>
+    <OffcanvasBody />
+  </Offcanvas>
   <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
     <Row>
       <Col>
@@ -165,6 +183,9 @@ exports[`ProfileView Should render correctly with shallow 1`] = `
            
           &#39;s Profile
         </h1>
+      </Col>
+      <Col>
+        <ButtonGroup style={{...}} vertical={false} role=\\"group\\" />
       </Col>
     </Row>
     <Row>
