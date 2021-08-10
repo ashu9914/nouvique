@@ -473,11 +473,11 @@ class OrdersWithUserGetView(APIView) :
 class OrderSpecificChangeView(APIView) :
 	permission_classes = (IsAuthenticated, )
 	
-	def post(self, request, id) :
+	def post(self, request, order_id) :
 		try:
 			req = json.loads(request.body.decode('utf-8'))
 
-			order = Order.objects.get(id=id)
+			order = Order.objects.get(id=order_id)
 
 			if "shipped" in req :
 				order.shipping_tag = req["shipping_tag"]

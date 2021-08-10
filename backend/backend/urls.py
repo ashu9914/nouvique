@@ -54,7 +54,7 @@ urlpatterns = [
 
 	path(NAMESPACE + '/get_orders/<str:username>/', views.OrdersGetView.as_view()),
 	path(NAMESPACE + '/get_orders/<str:seller_username>/<str:buyer_username>/', views.OrdersWithUserGetView.as_view()),
-	path(NAMESPACE + '/order/<int:id>/', views.OrderSpecificChangeView.as_view()),
+	path(NAMESPACE + '/order/<int:order_id>/', views.OrderSpecificChangeView.as_view()),
 
 	path(NAMESPACE + '/stripe_webhook/', views.StripePaymentIntentWebhookView.as_view()),
 ] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
