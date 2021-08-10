@@ -498,7 +498,9 @@ class OrderSpecificChangeView(APIView) :
 
 			order.save()
 
-			return Response(get_private_order_object(order), status=STATUS_CODE_2xx.ACCEPTED.value)
+			return_order = Order.objects.get(id=order_id)
+
+			return Response(get_private_order_object(return_order), status=STATUS_CODE_2xx.ACCEPTED.value)
 
 		except Exception :
 			traceback.print_exc()
