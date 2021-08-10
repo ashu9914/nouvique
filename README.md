@@ -6,8 +6,6 @@ A web application built for the WAD2 course that is meant to fill the gap in the
 
 ## Running Locally
 
-The `STRIPE_SECRET_WEBHOOK_KEY` value on line 35 of the `backend/backend/settings.py` file has to be updated to your own testing Webhook API key. Instructions on how to generate this are in the comment on the specified line.
-
 ```bash
 # running back end
 . run_backend.sh y
