@@ -1,12 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ProfileView Should render correctly with mount 1`] = `
+exports[`SupportView Should render correctly with mount 1`] = `
 "<MemoryRouter>
   <Router history={{...}}>
-    <ProfileView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
-      <Offcanvas show={false} onHide={[Function (anonymous)]} placement=\\"end\\" scroll={true} backdrop={false} keyboard={true} autoFocus={true} enforceFocus={true} restoreFocus={true}>
-        <Modal show={false} backdrop={false} container={[undefined]} keyboard={true} autoFocus={true} enforceFocus={true} restoreFocus={true} restoreFocusOptions={[undefined]} onEscapeKeyDown={[undefined]} onShow={[undefined]} onHide={[Function (anonymous)]} onEnter={[Function: handleEnter]} onEntering={[undefined]} onEntered={[undefined]} onExit={[undefined]} onExiting={[undefined]} onExited={[Function: handleExited]} manager={{...}} containerClassName=\\"offcanvas-open\\" transition={[Function: DialogTransition]} backdropTransition={[Function: BackdropTransition]} renderBackdrop={[Function (anonymous)]} renderDialog={[Function: renderDialog]} />
-      </Offcanvas>
+    <SupportView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
       <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
         <NavBar>
           <Navbar bg=\\"transparent\\" variant=\\"light\\" expand={true} collapseOnSelect={false}>
@@ -115,100 +112,56 @@ exports[`ProfileView Should render correctly with mount 1`] = `
             <div className=\\"row\\">
               <Col>
                 <div className=\\"col\\">
-                  <h1>
-                     
-                    &#39;s Profile
-                  </h1>
+                  <h2>
+                    Contact us.
+                  </h2>
                 </div>
               </Col>
+            </div>
+          </Row>
+          <Row>
+            <div className=\\"row\\">
               <Col>
                 <div className=\\"col\\">
-                  <ButtonGroup style={{...}} vertical={false} role=\\"group\\">
-                    <div style={{...}} role=\\"group\\" className=\\"btn-group\\" />
-                  </ButtonGroup>
+                  <p>
+                    If it is necessary to contact us, for a technical issue or just answering some questions, please contact us using our email:
+                  </p>
+                  <p>
+                    <a href=\\"mailto:nouvique.site@gmail.com\\">
+                      nouvique.site@gmail.com
+                    </a>
+                  </p>
                 </div>
               </Col>
-            </div>
-          </Row>
-          <Row>
-            <div className=\\"row\\">
-              <div>
-                @
-                foo
-              </div>
-            </div>
-          </Row>
-          <Row>
-            <div className=\\"row\\">
-              <div />
-            </div>
-          </Row>
-          <Row>
-            <div className=\\"row\\">
-              <div />
-            </div>
-          </Row>
-          <Row>
-            <div className=\\"row\\">
-              <span style={{...}}>
-                <div>
-                  ,
-                </div>
-                 
-                <div />
-              </span>
             </div>
           </Row>
         </div>
       </BasePage>
-    </ProfileView>
+    </SupportView>
   </Router>
 </MemoryRouter>"
 `;
 
-exports[`ProfileView Should render correctly with shallow 1`] = `
-"<Fragment>
-  <Offcanvas show={false} onHide={[Function (anonymous)]} placement=\\"end\\" scroll={true} backdrop={false} keyboard={true} autoFocus={true} enforceFocus={true} restoreFocus={true}>
-    <OffcanvasHeader closeButton={true} closeLabel=\\"Close\\">
-      <OffcanvasTitle>
-        Orders
-      </OffcanvasTitle>
-    </OffcanvasHeader>
-    <OffcanvasBody />
-  </Offcanvas>
-  <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
-    <Row>
-      <Col>
-        <h1>
-           
-          &#39;s Profile
-        </h1>
-      </Col>
-      <Col>
-        <ButtonGroup style={{...}} vertical={false} role=\\"group\\" />
-      </Col>
-    </Row>
-    <Row>
-      <div>
-        @
-        foo
-      </div>
-    </Row>
-    <Row>
-      <div />
-    </Row>
-    <Row>
-      <div />
-    </Row>
-    <Row>
-      <span style={{...}}>
-        <div>
-          ,
-        </div>
-         
-        <div />
-      </span>
-    </Row>
-  </BasePage>
-</Fragment>"
+exports[`SupportView Should render correctly with shallow 1`] = `
+"<BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
+  <Row>
+    <Col>
+      <h2>
+        Contact us.
+      </h2>
+    </Col>
+  </Row>
+  <Row>
+    <Col>
+      <p>
+        If it is necessary to contact us, for a technical issue or just answering some questions, please contact us using our email:
+      </p>
+      <p>
+        <a href=\\"mailto:nouvique.site@gmail.com\\">
+          nouvique.site@gmail.com
+        </a>
+      </p>
+    </Col>
+  </Row>
+</BasePage>"
 `;
