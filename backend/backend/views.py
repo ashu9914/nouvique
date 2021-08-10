@@ -314,7 +314,7 @@ class PaymentIntentView(APIView) :
 						}
 					)
 
-					Order.objects.create(
+					order = Order.objects.create(
 						stripe_payment_intent_id=payment_intent.id, 
 						stripe_client_secret=payment_intent.client_secret, 
 						item=item,
@@ -323,6 +323,11 @@ class PaymentIntentView(APIView) :
 						buyer=buyer,
 						total=int((req_item["price"]*req_item["quantity"]) * 100)
 					)
+
+					if STRIPE_SECRET_WEBHOOK_KEY == 'dev_webhook_key' :
+						# By pass webhook as does not function fully correctly when running locally
+						order.payment_successful = True
+						order.save()
 
 					payment_intent_client_secrets.append(payment_intent.client_secret)
 
