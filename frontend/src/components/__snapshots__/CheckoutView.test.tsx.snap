@@ -179,7 +179,7 @@ exports[`CheckoutView Should render correctly with mount 1`] = `
             </InjectedCheckoutForm>
           </Elements>
         </div>
-        <footer className=\\"footer mt-auto py-3 bg-dark text-white\\">
+        <footer className=\\"footer mt-auto py-3 bg-transparent text-black\\">
           <Container fluid={false}>
             <div className=\\"container\\">
               <Row>
