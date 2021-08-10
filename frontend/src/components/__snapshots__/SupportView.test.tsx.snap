@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RefreshUpdateStripeView Should render correctly with mount 1`] = `
+exports[`SupportView Should render correctly with mount 1`] = `
 "<MemoryRouter>
   <Router history={{...}}>
-    <RefreshUpdateStripeView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
+    <SupportView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
       <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
         <NavBar>
           <Navbar bg=\\"transparent\\" variant=\\"light\\" expand={true} collapseOnSelect={false}>
@@ -108,7 +108,33 @@ exports[`RefreshUpdateStripeView Should render correctly with mount 1`] = `
               </Fade>
             </Alert>
           </AlertBar>
-          Attempting to refresh Stripe update link...
+          <Row>
+            <div className=\\"row\\">
+              <Col>
+                <div className=\\"col\\">
+                  <h2>
+                    Contact us.
+                  </h2>
+                </div>
+              </Col>
+            </div>
+          </Row>
+          <Row>
+            <div className=\\"row\\">
+              <Col>
+                <div className=\\"col\\">
+                  <p>
+                    If it is necessary to contact us, for a technical issue or just answering some questions, please contact us using our email:
+                  </p>
+                  <p>
+                    <a href=\\"mailto:nouvique.site@gmail.com\\">
+                      nouvique.site@gmail.com
+                    </a>
+                  </p>
+                </div>
+              </Col>
+            </div>
+          </Row>
         </div>
         <footer className=\\"footer mt-auto py-3 bg-transparent text-black\\">
           <Container fluid={false}>
@@ -140,13 +166,31 @@ exports[`RefreshUpdateStripeView Should render correctly with mount 1`] = `
           </Container>
         </footer>
       </BasePage>
-    </RefreshUpdateStripeView>
+    </SupportView>
   </Router>
 </MemoryRouter>"
 `;
 
-exports[`RefreshUpdateStripeView Should render correctly with shallow 1`] = `
+exports[`SupportView Should render correctly with shallow 1`] = `
 "<BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
-  Attempting to refresh Stripe update link...
+  <Row>
+    <Col>
+      <h2>
+        Contact us.
+      </h2>
+    </Col>
+  </Row>
+  <Row>
+    <Col>
+      <p>
+        If it is necessary to contact us, for a technical issue or just answering some questions, please contact us using our email:
+      </p>
+      <p>
+        <a href=\\"mailto:nouvique.site@gmail.com\\">
+          nouvique.site@gmail.com
+        </a>
+      </p>
+    </Col>
+  </Row>
 </BasePage>"
 `;

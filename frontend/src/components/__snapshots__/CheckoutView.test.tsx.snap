@@ -179,6 +179,35 @@ exports[`CheckoutView Should render correctly with mount 1`] = `
             </InjectedCheckoutForm>
           </Elements>
         </div>
+        <footer className=\\"footer mt-auto py-3 bg-transparent text-black\\">
+          <Container fluid={false}>
+            <div className=\\"container\\">
+              <Row>
+                <div className=\\"row\\">
+                  <Col>
+                    <div className=\\"col\\">
+                      Nouvique 2021 v
+                      0.21.0
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className=\\"col\\">
+                      <div style={{...}}>
+                        <Link to=\\"/support\\">
+                          <LinkAnchor href=\\"/support\\" navigate={[Function: navigate]}>
+                            <a href=\\"/support\\" onClick={[Function: onClick]}>
+                              Support
+                            </a>
+                          </LinkAnchor>
+                        </Link>
+                      </div>
+                    </div>
+                  </Col>
+                </div>
+              </Row>
+            </div>
+          </Container>
+        </footer>
       </BasePage>
     </CheckoutView>
   </Router>

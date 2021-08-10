@@ -13,6 +13,7 @@ import { CheckoutView } from './components/CheckoutView';
 import { RefreshOnboardingStripeView } from './components/RefreshOnboardingStripeView';
 import { RefreshUpdateStripeView } from './components/RefreshUpdateStripeView';
 import { VerifyProfileView } from './components/VerifyProfileView';
+import { SupportView } from './components/SupportView';
 
 import { AlertBarUpdater, BasketItem, ItemREST, ItemTypeAvailableREST, itemTypeAvailableRESTLink, ItemTypeREST, PageProps, resolveGETCall, Tokens } from './utils';
 import config from './config';
@@ -173,6 +174,8 @@ export default class App extends React.Component<Props, State> {
 						<Route path="/verify_profile/:username/:account_id" render={(props) => <VerifyProfileView {...props} {...this.state} />} />
 
 						<Route path="/checkout" render={(props) => <CheckoutView {...props} {...this.state} />} />
+
+						<Route path="/support" render={(props) => <SupportView {...props} {...this.state} />} />
 					</Switch>
 				</Router>
 			</React.Fragment>
