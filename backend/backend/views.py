@@ -478,11 +478,11 @@ class OrdersWithUserGetView(APIView) :
 class OrderSpecificChangeView(APIView) :
 	permission_classes = (IsAuthenticated, )
 	
-	def post(self, request, id) :
+	def post(self, request, order_id) :
 		try:
 			req = json.loads(request.body.decode('utf-8'))
 
-			order = Order.objects.get(id=id)
+			order = Order.objects.get(id=order_id)
 
 			if "shipped" in req :
 				order.shipping_tag = req["shipping_tag"]
@@ -503,7 +503,9 @@ class OrderSpecificChangeView(APIView) :
 
 			order.save()
 
-			return Response(get_private_order_object(order), status=STATUS_CODE_2xx.ACCEPTED.value)
+			return_order = Order.objects.get(id=order_id)
+
+			return Response(get_private_order_object(return_order), status=STATUS_CODE_2xx.ACCEPTED.value)
 
 		except Exception :
 			traceback.print_exc()
