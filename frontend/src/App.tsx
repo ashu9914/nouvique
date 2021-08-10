@@ -166,9 +166,9 @@ export default class App extends React.Component<Props, State> {
 						<Route exact path="/" render={(props) => <HomeView {...props} {...this.state} />} />
 						<Route exact path="/login" render={(props) => <LoginView {...props} {...this.state} />} />
 						<Route exact path="/media/" render={(props) => <MediaListView {...props} {...this.state} />} />
-						<Route path="/media/:media_id" render={(props) => <MediaView {...props} {...this.state} />} />
+						<Route exact path="/media/:media_id" render={(props) => <MediaView key={Date.now()} {...props} {...this.state} />} />
 
-						<Route path="/profile/:username" render={(props) => <ProfileView {...props} {...this.state} />} />
+						<Route path="/profile/:username" render={(props) => <ProfileView key={Date.now()} {...props} {...this.state} />} />
 						<Route path="/refresh_stripe_update_link/:username" render={(props) => <RefreshUpdateStripeView {...props} {...this.state} />} />
 						<Route path="/refresh_stripe_onboarding_link/:username" render={(props) => <RefreshOnboardingStripeView {...props} {...this.state} />} />
 						<Route path="/verify_profile/:username/:account_id" render={(props) => <VerifyProfileView {...props} {...this.state} />} />

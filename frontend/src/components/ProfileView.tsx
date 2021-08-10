@@ -388,12 +388,37 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 											</Row>
 											<Row>
 												<Col>
+													Bought by:
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														<Link to={'/profile/' + order.buyer}>
+															{order.buyer}
+														</Link>
+													</div>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
 													{order.item_bio}
 												</Col>
 											</Row>
 											<Row>
 												<Col>
 													{order.item_type_size}
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													Payment Processed
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														<Form.Check
+															type='checkbox'
+															defaultChecked={order.payment_successful}
+															disabled />
+													</div>
 												</Col>
 											</Row>
 											<Row>
@@ -414,7 +439,6 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 																<div>
 																	<Form.Check
 																		type='checkbox'
-																		onChange={() => this.handleOrderCheckChange(index, "shipped")}
 																		defaultChecked={order.shipped}
 																		disabled />
 																</div>
@@ -468,7 +492,6 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 																<div>
 																	<Form.Check
 																		type='checkbox'
-																		onChange={() => this.handleOrderCheckChange(index, "arrived")}
 																		defaultChecked={order.arrived}
 																		disabled />
 																</div>
