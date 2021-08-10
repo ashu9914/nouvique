@@ -7,7 +7,7 @@ A web application built for the WAD2 course that is meant to fill the gap in the
 ## Running Locally
 
 ```bash
-# running back end
+# running backend
 . run_backend.sh y
 
 # running frontend
