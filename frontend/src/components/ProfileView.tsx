@@ -1,15 +1,16 @@
 import React from 'react';
 
-import { FaCheck, FaTimes, FaSpinner } from 'react-icons/fa';
+import { FaCheck, FaTimes, FaSpinner, FaList } from 'react-icons/fa';
 import { Result } from 'neverthrow';
-import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Form, InputGroup, Offcanvas, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { UserRESTSubmit, UserREST, UserRESTKeys, UserStripeUpdateLinkREST, UserStripeOnboardingLinkREST, Tokens, PageProps, resolveGETCall, resolvePUTCall, userStripeOnboardingLinkRESTLink, userRESTLink, userStripeUpdateLinkRESTLink, itemsListRESTLink, ItemRESTList, ItemTypeRESTList, itemTypeListRESTLink, userRESTSubmitLink } from '../utils';
+import { UserRESTSubmit, UserREST, UserRESTKeys, UserStripeUpdateLinkREST, UserStripeOnboardingLinkREST, Tokens, PageProps, resolveGETCall, resolvePUTCall, userStripeOnboardingLinkRESTLink, userRESTLink, userStripeUpdateLinkRESTLink, userRESTSubmitLink, OrderListREST, orderListRESTLink, getFormattedPriceString, OrderBuyerRESTSubmit, OrderREST, orderRESTSubmitLink, OrderSellerRESTSubmit, resolvePOSTCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
 import './ProfileView.css';
+import { Link } from 'react-router-dom';
 
 interface MatchParams {
 	username: string
@@ -23,7 +24,10 @@ interface State {
 	isUser: boolean,
 	submit_error: boolean,
 	onboarding_link: string
-	update_link: string
+	update_link: string,
+	orders: OrderListREST,
+	ordersForm: OrderListREST,
+	showOrders: boolean
 }
 
 export class ProfileView extends React.Component<ProfileViewProps, State> {
@@ -53,7 +57,10 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 			submit_error: false,
 			isUser: localStorage.getItem("username") === this.props.match.params.username,
 			onboarding_link: "",
-			update_link: ""
+			update_link: "",
+			orders: [],
+			ordersForm: [],
+			showOrders: false
 		};
 	}
 
@@ -74,6 +81,24 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 			});
 
 		if (this.state.isUser) {
+			// get the users orders
+			const pathOrders: string = orderListRESTLink + this.props.match.params.username + '/';
+			const resultOrders: Result<OrderListREST, Error> = await resolveGETCall<OrderListREST>(pathOrders, true);
+
+			resultOrders
+				.map(res => {
+					this.setState({ orders: res, ordersForm: [...res] });
+
+					return null; // necessary to silence warning
+				})
+				.mapErr(err => {
+					// cannot be authenticated with the user therefore, jwt tokens must not be correct, therefore, deny form access
+					this.setState({ isUser: false });
+
+					console.error(err);
+				});
+
+			// get the update or onboarding stripe link, depending on if the user is verified or not
 			if (!this.state.user.verified) {
 				const pathStripeOnboardingLink: string = userStripeOnboardingLinkRESTLink + this.props.match.params.username + '/';
 				const resultStripeOnboardingLink: Result<UserStripeOnboardingLinkREST, Error> = await resolveGETCall<UserStripeOnboardingLinkREST>(pathStripeOnboardingLink, true);
@@ -107,9 +132,24 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 						console.error(err);
 					});
 			}
+		} else if (localStorage.getItem("username") !== null && localStorage.getItem("username") !== "") {
+			// if the user is logged in, but the profile page isn't theirs, get the orders that they have with the current profile
+			const pathOrders: string = orderListRESTLink + this.props.match.params.username + '/' + localStorage.getItem("username") + '/';
+			const resultOrders: Result<OrderListREST, Error> = await resolveGETCall<OrderListREST>(pathOrders, true);
+
+			resultOrders
+				.map(res => {
+					this.setState({ orders: res, ordersForm: [...res] });
+
+					return null; // necessary to silence warning
+				})
+				.mapErr(err => {
+					console.error(err);
+				});
 		}
 
-		// TODO: comment everything below this out
+		// NOTE: comment everything below this out
+		/*
 		const itemsPath: string = itemsListRESTLink + this.props.match.params.username + '/';
 		const itemResult: Result<ItemRESTList, Error> = await resolveGETCall<ItemRESTList>(itemsPath);
 
@@ -140,6 +180,13 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 			.mapErr(err => {
 				console.error(err);
 			});
+		*/
+	}
+
+	toggleOrders = async () => {
+		this.setState(prevState => (
+			{ showOrders: !prevState.showOrders }
+		));
 	}
 
 	handleChangeSubmit = async () => {
@@ -228,9 +275,252 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 		}
 	}
 
+	handleOrderSubmit = async (index: number, event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		const path = orderRESTSubmitLink + this.state.orders[index].id + '/';
+
+		if (this.state.orders[index].seller === localStorage["username"]) {
+			const data: OrderSellerRESTSubmit = {
+				shipping_tag: this.state.ordersForm[index].shipping_tag,
+				shipped: this.state.ordersForm[index].shipped
+			};
+			const result: Result<OrderREST, Error> = await resolvePOSTCall<OrderREST, OrderSellerRESTSubmit>(path, data, true);
+
+			result
+				.map(res => {
+					let copy: OrderListREST = [...this.state.orders];
+					copy[index] = res;
+					this.setState({ orders: copy });
+
+					return null; // necessary to silence warning
+				})
+				.mapErr(err => {
+					const message: string = "Could not update order, please try logging out and back in";
+
+					this.setState({ submit_error: true });
+
+					this.props.updateAlertBar(message, "danger", true);
+				});
+		} else {
+			const data: OrderBuyerRESTSubmit = {
+				arrived: this.state.ordersForm[index].arrived
+			};
+			const result: Result<OrderREST, Error> = await resolvePOSTCall<OrderREST, OrderBuyerRESTSubmit>(path, data, true);
+
+			result
+				.map(res => {
+					let copy: OrderListREST = [...this.state.orders];
+					copy[index] = res;
+					this.setState({ orders: copy });
+
+					return null; // necessary to silence warning
+				})
+				.mapErr(err => {
+					const message: string = "Could not update order, please try logging out and back in";
+
+					this.setState({ submit_error: true });
+
+					this.props.updateAlertBar(message, "danger", true);
+				});
+		}
+	}
+
+	handleOrderCheckChange = (index: number, field: "arrived" | "shipped") => {
+		this.setState(prevState => {
+			var copy: OrderListREST = [...prevState.ordersForm];
+			copy[index][field] = true;
+
+			return ({ ordersForm: copy });
+		});
+	}
+
+	handleOrderShippingTagChange = (index: number, event: any) => {
+		this.setState(prevState => {
+			var copy: OrderListREST = [...prevState.ordersForm];
+			copy[index]["shipping_tag"] = event.target.value;
+
+			return ({ ordersForm: copy });
+		});
+	}
+
 	render() {
 		return (
 			<React.Fragment>
+				<Offcanvas
+					show={this.state.showOrders}
+					onHide={this.toggleOrders}
+					placement='end'
+					scroll={true}
+					backdrop={false}>
+					<Offcanvas.Header closeButton>
+						<Offcanvas.Title>Orders</Offcanvas.Title>
+					</Offcanvas.Header>
+					<Offcanvas.Body>
+						{this.state.orders.map((order, index) => {
+							return (
+								<React.Fragment key={index + '-order-entry'}>
+									<div className="bottom-border">
+										<Form onSubmit={(event) => this.handleOrderSubmit(index, event)}>
+											<Row>
+												<Col>
+													<h5>
+														{order.item_name}
+													</h5>
+												</Col>
+												<Col>
+													<span style={{ float: 'right' }}>
+														£{getFormattedPriceString(order.total)}
+													</span>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													Bought from:
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														<Link to={'/profile/' + order.seller}>
+															{order.seller}
+														</Link>
+													</div>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													Bought by:
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														<Link to={'/profile/' + order.buyer}>
+															{order.buyer}
+														</Link>
+													</div>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													{order.item_bio}
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													{order.item_type_size}
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													Payment Processed
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														<Form.Check
+															type='checkbox'
+															defaultChecked={order.payment_successful}
+															disabled />
+													</div>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													Shipped
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														{(order.seller === localStorage["username"] && this.state.ordersForm[index].shipping_tag === "") ?
+															<OverlayTrigger
+																placement='top'
+																overlay={
+																	<Tooltip id={index + '-shipped-tooltip'}>
+																		Cannot mark as shipped until Tracking Number is supplied
+        																</Tooltip>
+																}
+															>
+																<div>
+																	<Form.Check
+																		type='checkbox'
+																		defaultChecked={order.shipped}
+																		disabled />
+																</div>
+															</OverlayTrigger>
+															:
+															<Form.Check
+																type='checkbox'
+																onChange={() => this.handleOrderCheckChange(index, "shipped")}
+																disabled={!(order.seller === localStorage["username"]) || order.shipped}
+																defaultChecked={order.shipped} />
+														}
+													</div>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													Tracking Number
+												</Col>
+												<Col>
+													{order.seller === localStorage["username"] ?
+														<Form.Control
+															required
+															type="text"
+															value={order.shipping_tag}
+															onChange={(event) => this.handleOrderShippingTagChange(index, event)}
+															disabled={order.shipped} />
+														:
+														<React.Fragment>
+															<div style={{ float: 'right' }}>
+																{order.shipping_tag}
+															</div>
+														</React.Fragment>
+													}
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													Arrived
+												</Col>
+												<Col>
+													<div style={{ float: 'right' }}>
+														{(order.buyer === localStorage["username"] && !order.shipped) ?
+															<OverlayTrigger
+																placement='top'
+																overlay={
+																	<Tooltip id={index + '-shipped-tooltip'}>
+																		Cannot mark as arrived until shipped
+        																</Tooltip>
+																}
+															>
+																<div>
+																	<Form.Check
+																		type='checkbox'
+																		defaultChecked={order.arrived}
+																		disabled />
+																</div>
+															</OverlayTrigger>
+															:
+															<Form.Check
+																type='checkbox'
+																onChange={() => this.handleOrderCheckChange(index, "arrived")}
+																disabled={!(order.buyer === localStorage["username"]) || order.arrived}
+																defaultChecked={order.arrived} />
+														}
+													</div>
+												</Col>
+											</Row>
+											<Row>
+												<Col>
+													<Button type='submit' variant='outline-secondary' style={{ float: 'right' }}>
+														Update
+													</Button>
+												</Col>
+											</Row>
+										</Form>
+									</div>
+								</React.Fragment>
+							);
+						})}
+					</Offcanvas.Body>
+				</Offcanvas >
+
 				<BasePage {...this.props}>
 					<Row>
 						<Col>
@@ -241,13 +531,20 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 								}
 							</h1>
 						</Col>
-						{this.state.isUser &&
-							<Col>
-								<Button onClick={this.handleLogOut} variant='outline-danger' style={{ float: "right" }}>
-									Log out
-								</Button>
-							</Col>
-						}
+						<Col>
+							<ButtonGroup style={{ float: "right" }}>
+								{this.state.orders.length > 0 &&
+									<Button onClick={this.toggleOrders} variant='outline-secondary'>
+										<FaList /> Show Orders
+										</Button>
+								}
+								{this.state.isUser &&
+									<Button onClick={this.handleLogOut} variant='outline-danger'>
+										Log out
+									</Button>
+								}
+							</ButtonGroup>
+						</Col>
 					</Row>
 
 					<Row>

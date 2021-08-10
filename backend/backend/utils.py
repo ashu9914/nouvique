@@ -84,12 +84,18 @@ def get_public_itemtype_object(itemtype) :
 
 def get_private_order_object(order) :
 	return {
-		"item" : order.item.name,
-		"item_type" : order.item_type.id,
+		"item_name" : order.item.name,
+		"item_bio" : order.item.bio,
+		"item_type_price" : order.item_type.price,
+		"item_type_size" : order.item_type.size,
 		"quantity": order.quantity,
+		"total": order.total / 100, # divide as stored value is multiplied by 100 for stripe
 		"purchase_date": order.purchase_date,
 		"payment_successful": order.payment_successful,
 		"shipped": order.shipped,
 		"arrived": order.arrived,
-		"shipping_tag" : order.shipping_tag
+		"shipping_tag" : order.shipping_tag,
+		"id" : order.id,
+		"buyer" : order.buyer.username,
+		"seller" : order.item.seller.username
 	}

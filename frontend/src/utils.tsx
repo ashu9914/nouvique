@@ -207,18 +207,38 @@ export function getActualPriceString(price: number, quantity: number): string {
 	return (Math.round((price * quantity) * 100) / 100).toFixed(2)
 }
 
-export const orderListRESTLink = '/orders/';
+export function getFormattedPriceString(price: number): string {
+	return (Math.round(price * 100) / 100).toFixed(2);
+}
+
+export const orderListRESTLink = '/get_orders/';
 export interface OrderREST {
-	item: string,
-	item_type: number,
+	item_name: string,
+	item_bio: string,
+	item_type_price: number,
+	item_type_size: string,
 	quantity: number,
+	total: number,
 	purchase_date: string,
 	payment_successful: boolean,
 	shipped: boolean,
 	arrived: boolean,
-	shipping_tag: string
+	shipping_tag: string,
+	id: number,
+	buyer: string,
+	seller: string
 }
 export type OrderListREST = OrderREST[];
+
+export const orderRESTSubmitLink = "/order/";
+export interface OrderSellerRESTSubmit {
+	shipped: boolean,
+	shipping_tag: string
+}
+
+export interface OrderBuyerRESTSubmit {
+	arrived: boolean
+}
 
 async function getNewAccessToken(): Promise<boolean> {
 	try {

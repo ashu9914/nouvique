@@ -37,17 +37,17 @@ class Item(models.Model):
 
 class ItemType(models.Model):
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
-	quantity = models.IntegerField()
+	quantity = models.IntegerField() # should be private as used to track available quantity
 	size = models.CharField(max_length=32)
 	price = models.FloatField()
 	available = models.BooleanField(default=True)
 
 class Order(models.Model):
 	buyer = models.ForeignKey(User, on_delete=models.CASCADE)
-	# seller_name can be accessed through item
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	item_type = models.ForeignKey(ItemType, on_delete=models.CASCADE)
-	quantity = models.IntegerField()
+	quantity = models.IntegerField() # public and represents how many a user has bought
+	total = models.IntegerField()
 	purchase_date = models.DateTimeField(auto_now_add=True)
 	payment_successful = models.BooleanField(default=False)
 	shipped = models.BooleanField(default=False)
