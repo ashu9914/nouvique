@@ -39,7 +39,9 @@ urlpatterns = [
 	path(NAMESPACE + '/is_user_verified/<str:username>/', views.UserIsVerifiedView.as_view()),
 	path(NAMESPACE + '/user/<str:username>/', views.UserChangeView.as_view()),
 	path(NAMESPACE + '/users/', views.UserListView.as_view()),
+	path(NAMESPACE + '/get_artists/', views.SellerListView.as_view()),
 
+	path(NAMESPACE + '/get_items/', views.ItemListView.as_view()),
 	path(NAMESPACE + '/get_items/<str:username>/', views.ItemsGetView.as_view()),
 	path(NAMESPACE + '/get_items/<str:username>/<str:name>/', views.ItemSpecificGetView.as_view()),
 	path(NAMESPACE + '/items/<str:username>/<str:name>/', views.ItemSpecificChangeView.as_view()),
