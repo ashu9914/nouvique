@@ -779,7 +779,7 @@ class ItemListView(generics.ListAPIView):
             f_text = self.request.query_params.get("q")
             if f_text and len(f_text) > 2:
                 queryset = queryset.filter(
-                    Q(title__icontains=f_text) | Q(author__icontains=f_text)
+                    Q(name__icontains=f_text) | Q(seller__icontains=f_text)
                 )
 
             # f_tags = self.request.query_params.get('tags')
