@@ -7,15 +7,11 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
 
 from backend.models import User, Item, ItemType, Order
-from backend.serializers import ItemSerializer, SellerSerializer
 from backend.utils import (
 	get_tokens_for_user,
 	get_public_user_object,
@@ -761,52 +757,3 @@ class UserListView(APIView):
 # 			roles.append(get_public_role_object(r))
 
 # 		return Response(roles, status=STATUS_CODE_2xx.SUCCESS.value)
-
-
-class ItemListView(generics.ListAPIView):
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-
-    def get_queryset(self):
-        queryset = Item.objects.all()
-
-        # .../get_items/?is_featured=1
-        is_featured = self.request.query_params.get("is_featured")
-        if is_featured == "1":
-            queryset = queryset.filter(is_featured=True)
-        else:
-            # other filters
-            f_text = self.request.query_params.get("q")
-            if f_text and len(f_text) > 2:
-                queryset = queryset.filter(
-                    Q(title__icontains=f_text) | Q(author__icontains=f_text)
-                )
-
-            # f_tags = self.request.query_params.get('tags')
-            # if f_tags:
-            #   f_tags = f_tags.split(',')
-            #   for tag in f_tags:
-            #   queryset = queryset.filter()
-
-            # f_region = self.request.query_params.get('region')
-            # if f_region:
-            #   queryset = queryset.filter()
-
-        return queryset
-
-
-class SellerListView(generics.ListAPIView):
-    queryset = User.objects.filter(is_seller=True)
-    serializer_class = SellerSerializer
-
-    def get_queryset(self):
-        queryset = User.objects.filter(is_seller=True)
-
-        # .../get_sellers/?is_featured=1
-        is_featured = self.request.query_params.get("is_featured")
-        if is_featured == "1":
-            queryset = queryset.filter(is_featured=True)
-        return queryset
-
-  
-  
