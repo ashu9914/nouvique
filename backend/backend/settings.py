@@ -27,9 +27,14 @@ secrets_path = str(BASE_DIR) + '/secrets.json'
 if os.path.exists(secrets_path):
 	f = json.load(open(secrets_path))
 	SECRET_KEY = f['backendSecretKey']
+	STRIPE_SECRET_KEY = f['stripeSecretKey']
+	STRIPE_SECRET_WEBHOOK_KEY = f['stripeSecretWebhookKey']
 else:
 	SECRET_KEY = 'dev_key'
+	STRIPE_SECRET_KEY = 'sk_test_51JL4S9JAHFg3rfUPkqO5EOwiS1Cc4O41eR537jHYA9PghuovVdKFy6sKk5WFkg1anTK6RdSdGR1dRF1knZg0Dwlt009jZfQjVg'
+	STRIPE_SECRET_WEBHOOK_KEY = 'dev_webhook_key'
 
+DEPLOYMENT_LINK = "http://localhost:3000"
 DEBUG = True
 
 ALLOWED_HOSTS = [

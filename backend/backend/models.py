@@ -12,6 +12,7 @@ class User(AbstractUser):
 	# profile_picture : static stub
 	bio = models.CharField(max_length=256, default="")
 	verified = models.BooleanField(default=False)
+	stripe_account_id = models.CharField(max_length=128, default='')
 
 	USERNAME_FIELD = 'username'
 	REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password', 'location_town', 'location_country', 'location_postcode']
@@ -36,18 +37,21 @@ class Item(models.Model):
 
 class ItemType(models.Model):
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
-	quantity = models.IntegerField()
+	quantity = models.IntegerField() # should be private as used to track available quantity
 	size = models.CharField(max_length=32)
 	price = models.FloatField()
 	available = models.BooleanField(default=True)
 
 class Order(models.Model):
-	buyer_name = models.ForeignKey(User, on_delete=models.CASCADE)
-	# seller_name can be accessed through item
+	buyer = models.ForeignKey(User, on_delete=models.CASCADE)
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	item_type = models.ForeignKey(ItemType, on_delete=models.CASCADE)
-	quantity = models.IntegerField()
+	quantity = models.IntegerField() # public and represents how many a user has bought
+	total = models.IntegerField()
 	purchase_date = models.DateTimeField(auto_now_add=True)
+	payment_successful = models.BooleanField(default=False)
 	shipped = models.BooleanField(default=False)
 	arrived = models.BooleanField(default=False)
-	shipping_tag = models.CharField(max_length=256)
+	shipping_tag = models.CharField(max_length=256, default="")
+	stripe_client_secret = models.CharField(max_length=128)
+	stripe_payment_intent_id = models.CharField(max_length=128) # can be used to access all the payment_intent information so the whole object does not have to be saved

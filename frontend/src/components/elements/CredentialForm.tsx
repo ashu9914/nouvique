@@ -4,7 +4,7 @@ import { Result } from 'neverthrow';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { TokenREST, RegistrationRESTSubmit, resolvePOSTCall, PageProps } from '../../utils';
+import { TokenREST, RegistrationRESTSubmit, resolvePOSTCall, PageProps, loginRESTLink, registrationRESTLink } from '../../utils';
 
 import './CredentialForm.css';
 
@@ -45,7 +45,7 @@ export default class LoginForm extends React.PureComponent<Props, State> {
 			location_postcode: this.state.location_postcode
 		};
 
-		const path = this.state.register ? '/auth/register/' : '/auth/login/';
+		const path = this.state.register ? registrationRESTLink : loginRESTLink;
 
 		const result: Result<TokenREST, Error> = await resolvePOSTCall<TokenREST, RegistrationRESTSubmit>(path, data);
 

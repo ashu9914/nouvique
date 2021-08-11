@@ -5,24 +5,20 @@ import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { PageProps, resolveGETCall } from '../utils';
+import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
 import './HomeView.css';
 
-interface ApiTest {
-	blah: string
-}
-
-interface Props extends RouteComponentProps, PageProps { }
+export interface HomeViewProps extends RouteComponentProps, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export default class HomeView extends React.Component<Props, State> {
-	constructor(props: Props) {
+export class HomeView extends React.Component<HomeViewProps, State> {
+	constructor(props: HomeViewProps) {
 		super(props);
 
 		this.state = {
@@ -33,7 +29,7 @@ export default class HomeView extends React.Component<Props, State> {
 	}
 
 	async componentDidMount() {
-		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>('/');
+		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>(apiTestLink);
 
 		result
 			.map(res => {
@@ -72,6 +68,9 @@ export default class HomeView extends React.Component<Props, State> {
 							</h1>
 						</Col>
 
+						<h1>
+							Home
+						</h1>
 					</Row>
 
 					<Row>

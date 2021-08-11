@@ -14,10 +14,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14.x
           
       - name: Install packages
         run: |
@@ -38,6 +38,7 @@ jobs:
           mkdir build
           cd ../../
           sed -i 's/DEBUG = True/DEBUG = False/I' backend/backend/settings.py
+          sed -i 's/DEPLOYMENT_LINK = "http:\/\/localhost:3000"/DEPLOYMENT_LINK = "https:\/\/nouvique.pythonanywhere.com"/I' backend/backend/settings.py
           cp backend/backend/* release/backend/backend/
           cp backend/manage.py release/backend/
           cp backend/requirements.txt release/backend/
