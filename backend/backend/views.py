@@ -764,49 +764,49 @@ class UserListView(APIView):
 
 
 class ItemListView(generics.ListAPIView):
-	queryset = Item.objects.all()
-	serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
 
-	def get_queryset(self):
-		queryset = Item.objects.all()
+    def get_queryset(self):
+        queryset = Item.objects.all()
 
-		# .../get_items/?is_featured=1
-		is_featured = self.request.query_params.get("is_featured")
-		if is_featured == "1":
-			queryset = queryset.filter(is_featured=True)
-		else:
-			# other filters
-			f_text = self.request.query_params.get("q")
-			if f_text and len(f_text) > 2:
-				queryset = queryset.filter(
-				    Q(name__icontains=f_text) | Q(seller__icontains=f_text)
-				)
+        # .../get_items/?is_featured=1
+        is_featured = self.request.query_params.get("is_featured")
+        if is_featured == "1":
+            queryset = queryset.filter(is_featured=True)
+        else:
+            # other filters
+            f_text = self.request.query_params.get("q")
+            if f_text and len(f_text) > 2:
+                queryset = queryset.filter(
+                    Q(name__icontains=f_text) | Q(seller__icontains=f_text)
+                )
 
-		# f_tags = self.request.query_params.get('tags')
-		# if f_tags:
-		#   f_tags = f_tags.split(',')
-		#   for tag in f_tags:
-		#   queryset = queryset.filter()
+            # f_tags = self.request.query_params.get('tags')
+            # if f_tags:
+            #   f_tags = f_tags.split(',')
+            #   for tag in f_tags:
+            #   queryset = queryset.filter()
 
-		# f_region = self.request.query_params.get('region')
-		# if f_region:
-		#   queryset = queryset.filter()
+            # f_region = self.request.query_params.get('region')
+            # if f_region:
+            #   queryset = queryset.filter()
 
-		return queryset
+        return queryset
 
 
 class SellerListView(generics.ListAPIView):
-	queryset = User.objects.filter(is_seller=True)
-	serializer_class = SellerSerializer
+    queryset = User.objects.filter(is_seller=True)
+    serializer_class = SellerSerializer
 
-	def get_queryset(self):
-		queryset = User.objects.filter(is_seller=True)
+    def get_queryset(self):
+        queryset = User.objects.filter(is_seller=True)
 
-		# .../get_sellers/?is_featured=1
-		is_featured = self.request.query_params.get("is_featured")
-		if is_featured == "1":
-			queryset = queryset.filter(is_featured=True)
-		return queryset
+        # .../get_sellers/?is_featured=1
+        is_featured = self.request.query_params.get("is_featured")
+        if is_featured == "1":
+            queryset = queryset.filter(is_featured=True)
+        return queryset
 
   
   
