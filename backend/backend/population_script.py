@@ -179,7 +179,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'99A',
   },
   {
@@ -191,7 +191,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'98B',
   },
   {
@@ -203,7 +203,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'97C',
   },
   {
@@ -215,7 +215,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'96D',
   },
   {
@@ -227,7 +227,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'95P',
   }
   
@@ -292,5 +292,6 @@ def populate():
 # The execution actually starts here
 if __name__ == '__main__':
 	print('Starting Rango population script...')
-	populate()
 	print('Populated...')
+	populate()
+	
