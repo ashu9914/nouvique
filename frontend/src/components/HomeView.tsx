@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { Result } from 'neverthrow';
-import { Row } from 'react-bootstrap';
-import { Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
 import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
