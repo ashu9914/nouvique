@@ -257,15 +257,15 @@ def populate():
 		user.save()
 
    for i in items : #for items
-	seller = User.objects.all(username=i['seller'])
+       seller = User.objects.all(username=i['seller'])
   
-        seller.save()
+       seller.save()
   
    for t in item_types:
-      item_type = ItemType.objects.get(id=req_item["type_id"])
+       item_type = ItemType.objects.get(id=req_item["type_id"])
       
    for o in orders: #for order 
-      payment_intent = stripe.PaymentIntent.create(
+       payment_intent = stripe.PaymentIntent.create(
 						amount=str(int((o["price"]*o["quantity"]) * 100)),
 						currency="gbp",
 						payment_method_types=["card"],
