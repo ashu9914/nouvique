@@ -70,10 +70,9 @@ export default class NavBar extends React.PureComponent<Props, State> {
 									:
 									<NavLink
 										className='nav-link nav-right-side'
-										isActive={(match, location) => location.pathname === '/profile/*'}
 										activeClassName='nav-link active nav-right-side'
 										to={{ pathname: '/login' }}>
-										Profile
+										Login
 										</NavLink>
 								}
 							</Nav.Item>

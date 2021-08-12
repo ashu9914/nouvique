@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { Result } from 'neverthrow';
 import { Row, Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
+import { PageProps } from '../utils';
 
 import BasePage from './elements/BasePage';
 
@@ -12,22 +11,18 @@ import './HomeView.css';
 
 export interface HomeViewProps extends RouteComponentProps, PageProps { }
 
-interface State {
-	apiValue: ApiTest
-}
+interface State { }
 
 export class HomeView extends React.Component<HomeViewProps, State> {
-	constructor(props: HomeViewProps) {
-		super(props);
+	// constructor(props: HomeViewProps) {
+	// 	super(props);
 
-		this.state = {
-			apiValue: {
-				blah: ""
-			}
-		};
-	}
+	// 	this.state = {
+	// 	};
+	// }
 
 	async componentDidMount() {
+		/*
 		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>(apiTestLink);
 
 		result
@@ -39,6 +34,7 @@ export class HomeView extends React.Component<HomeViewProps, State> {
 			.mapErr(err => {
 				console.error(err);
 			});
+			*/
 	}
 
 	render() {
@@ -70,12 +66,6 @@ export class HomeView extends React.Component<HomeViewProps, State> {
 						<h1>
 							Home
 						</h1>
-					</Row>
-
-					<Row>
-						<div>
-							{this.state.apiValue.blah}
-						</div>
 					</Row>
 
 				</BasePage>

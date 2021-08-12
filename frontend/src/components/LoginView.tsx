@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { Result } from 'neverthrow';
 import { Row, Container, Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
-import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
+import { PageProps } from '../utils';
 
 import BasePage from './elements/BasePage';
 import LoginForm from './elements/CredentialForm';
@@ -13,44 +12,15 @@ import './LoginView.css';
 
 export interface LoginViewProps extends RouteComponentProps, PageProps { }
 
-interface State {
-	apiValue: ApiTest
-}
+interface State { }
 
 export class LoginView extends React.Component<LoginViewProps, State> {
-	constructor(props: LoginViewProps) {
-		super(props);
-
-		this.state = {
-			apiValue: {
-				blah: ""
-			}
-		};
-	}
-
-	async componentDidMount() {
-		const result: Result<ApiTest, Error> = await resolveGETCall<ApiTest>(apiTestLink);
-
-		result
-			.map(res => {
-				this.setState({ apiValue: res });
-
-				return null; // necessary to silence warning
-			})
-			.mapErr(err => {
-				console.error(err);
-			});
-	}
-
 	render() {
 		return (
 			<React.Fragment>
 				<BasePage {...this.props}>
-
-
 					<Container>
 						<Row>
-
 							<Col></Col>
 
 							<Col xs={6}>
@@ -58,12 +28,6 @@ export class LoginView extends React.Component<LoginViewProps, State> {
 									<h1 className="title">
 										login
 									</h1>
-								</Row>
-
-								<Row>
-									<div>
-										{this.state.apiValue.blah}
-									</div>
 								</Row>
 
 								<Row>

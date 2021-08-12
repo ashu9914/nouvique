@@ -40,7 +40,8 @@ export default class BasePage extends React.PureComponent<Props, State> {
 					</div>
 				</div>
 
-				<footer className='footer mt-auto py-3 bg-transparent text-black'>
+				<footer className='footer py-3 text-black'>
+					<div />
 					<Container>
 						<Row>
 							<Col>

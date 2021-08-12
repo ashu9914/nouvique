@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FaCheck, FaTimes, FaSpinner, FaList } from 'react-icons/fa';
 import { Result } from 'neverthrow';
-import { Button, ButtonGroup, Col, Form, InputGroup, Offcanvas, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Button, Col, Form, InputGroup, Offcanvas, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router';
 
 import { UserRESTSubmit, UserREST, UserRESTKeys, UserStripeUpdateLinkREST, UserStripeOnboardingLinkREST, Tokens, PageProps, resolveGETCall, resolvePUTCall, userStripeOnboardingLinkRESTLink, userRESTLink, userStripeUpdateLinkRESTLink, userRESTSubmitLink, OrderListREST, orderListRESTLink, getFormattedPriceString, OrderBuyerRESTSubmit, OrderREST, orderRESTSubmitLink, OrderSellerRESTSubmit, resolvePOSTCall } from '../utils';
@@ -352,20 +352,23 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 					onHide={this.toggleOrders}
 					placement='end'
 					scroll={true}
-					backdrop={false}>
-					<Offcanvas.Header closeButton>
+					backdrop={false}
+					className='orders-offcanvas body'>
+					<Offcanvas.Header closeButton className='orders-offcanvas header'>
 						<Offcanvas.Title>Orders</Offcanvas.Title>
 					</Offcanvas.Header>
 					<Offcanvas.Body>
 						{this.state.orders.map((order, index) => {
 							return (
 								<React.Fragment key={index + '-order-entry'}>
-									<div className="bottom-border">
+									<div className="orders-offcanvas order">
 										<Form onSubmit={(event) => this.handleOrderSubmit(index, event)}>
 											<Row>
 												<Col>
 													<h5>
-														{order.item_name}
+														<Link to={'/item/' + order.item_name}>
+															{order.item_name}
+														</Link>
 													</h5>
 												</Col>
 												<Col>
@@ -400,12 +403,12 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 											</Row>
 											<Row>
 												<Col>
-													{order.item_bio}
+													Size
 												</Col>
-											</Row>
-											<Row>
 												<Col>
-													{order.item_type_size}
+													<div style={{ float: 'right' }}>
+														{order.item_type_size}
+													</div>
 												</Col>
 											</Row>
 											<Row>
@@ -532,18 +535,21 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 							</h1>
 						</Col>
 						<Col>
-							<ButtonGroup style={{ float: "right" }}>
+							<div style={{ float: 'right' }}>
 								{this.state.orders.length > 0 &&
 									<Button onClick={this.toggleOrders} variant='outline-secondary'>
 										<FaList /> Show Orders
-										</Button>
-								}
-								{this.state.isUser &&
-									<Button onClick={this.handleLogOut} variant='outline-danger'>
-										Log out
 									</Button>
 								}
-							</ButtonGroup>
+								{this.state.isUser &&
+									<React.Fragment>
+										{' '}
+										<Button onClick={this.handleLogOut} variant='outline-danger'>
+											Log out
+								</Button>
+									</React.Fragment>
+								}
+							</div>
 						</Col>
 					</Row>
 
