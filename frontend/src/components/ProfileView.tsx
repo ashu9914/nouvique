@@ -355,7 +355,7 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 					backdrop={false}
 					className='orders-offcanvas body'>
 					<Offcanvas.Header closeButton className='orders-offcanvas header'>
-						<Offcanvas.Title>Orders</Offcanvas.Title>
+						<Offcanvas.Title className="title">orders</Offcanvas.Title>
 					</Offcanvas.Header>
 					<Offcanvas.Body>
 						{this.state.orders.map((order, index) => {
@@ -365,7 +365,7 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 										<Form onSubmit={(event) => this.handleOrderSubmit(index, event)}>
 											<Row>
 												<Col>
-													<h5>
+													<h5 className="title">
 														<Link to={'/item/' + order.item_name}>
 															{order.item_name}
 														</Link>
@@ -511,7 +511,7 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 											</Row>
 											<Row>
 												<Col>
-													<Button type='submit' variant='outline-secondary' style={{ float: 'right' }}>
+													<Button className="styled-btn" type='submit' variant='outline-secondary' style={{ float: 'right' }}>
 														Update
 													</Button>
 												</Col>
@@ -527,7 +527,7 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 				<BasePage {...this.props}>
 					<Row>
 						<Col>
-							<h1>
+							<h1 className="title">
 								{this.state.user.first_name} {this.state.user.last_name}'s Profile
 								{this.state.user.verified &&
 									<FaCheck />
@@ -537,15 +537,15 @@ export class ProfileView extends React.Component<ProfileViewProps, State> {
 						<Col>
 							<div style={{ float: 'right' }}>
 								{this.state.orders.length > 0 &&
-									<Button onClick={this.toggleOrders} variant='outline-secondary'>
-										<FaList /> Show Orders
+									<Button className="styled-btn" onClick={this.toggleOrders} variant='outline-secondary'>
+										<FaList /> show orders
 									</Button>
 								}
 								{this.state.isUser &&
 									<React.Fragment>
 										{' '}
-										<Button onClick={this.handleLogOut} variant='outline-danger'>
-											Log out
+										<Button className="styled-btn" onClick={this.handleLogOut} variant='outline-danger'>
+											log out
 								</Button>
 									</React.Fragment>
 								}

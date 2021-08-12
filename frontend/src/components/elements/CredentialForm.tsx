@@ -160,12 +160,12 @@ export default class LoginForm extends React.PureComponent<Props, State> {
 
 					<Row>
 						<Col>
-							<Button className="button" variant="outline-dark" type="submit">
+							<Button className="styled-btn" variant="outline-dark" type="submit">
 								{this.state.register ? "Register" : "Log in"}
 							</Button>
 						</Col>
 						<Col>
-							<Button className="button" onClick={() => this.setState(prev => ({ register: !prev.register }))} variant="outline-dark" style={{ float: "right" }}>
+							<Button className="styled-btn" onClick={() => this.setState(prev => ({ register: !prev.register }))} variant="outline-dark" style={{ float: "right" }}>
 								{this.state.register ? "Already registered?" : "Not signed up?"}
 							</Button>
 						</Col>

@@ -20,7 +20,7 @@
 	font-family: 'Spartan', sans-serif;
 }
 
-.btn {
+.styled-btn.btn {
 	font-family: 'Nunito', sans-serif;
 	padding-top: 2px;
 	padding-botton: 2px;
@@ -30,8 +30,8 @@
 	position: relative
 }
 
-.btn::before,
-.btn::after {
+.styled-btn.btn::before,
+.styled-btn.btn::after {
   content:"";
   background-color: black;
   top: -4px;
@@ -41,12 +41,12 @@
   width: 1.5px;
 }
 
-.btn::after {
+.styled-btn.btn::after {
   left: auto;
   right: 2px;
 }
 
-.btn:hover {
+.styled-btn.btn:hover {
 	background:rgb(232, 190, 144);
 }
 
