@@ -179,7 +179,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'99A',
   },
   {
@@ -191,7 +191,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'98B',
   },
   {
@@ -203,7 +203,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'97C',
   },
   {
@@ -215,7 +215,7 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'96D',
   },
   {
@@ -227,14 +227,12 @@ order = [
 		'purchase_date':'',
 		'payment_successful': True,
 		'shipped': False,
-		'arrived': Flase,
+		'arrived': False,
 		'shipping_tag':'95P',
   }
   
-	
 def populate():
-	
-  for u in users :  #for users
+    for u in users :  #for users
 		accountResponse = stripe.Account.create(
 			type="standard",
 			default_currency='GBP',
@@ -263,10 +261,10 @@ def populate():
   
     seller.save()
   
-  for t in item_types:
+   for t in item_types:
       item_type = ItemType.objects.get(id=req_item["type_id"])
       
-  for o in orders: #for order 
+   for o in orders: #for order 
       payment_intent = stripe.PaymentIntent.create(
 						amount=str(int((o["price"]*o["quantity"]) * 100)),
 						currency="gbp",
@@ -285,12 +283,13 @@ def populate():
 						buyer=buyer,
 						total=int((o["price"]*o["quantity"]) * 100)
        )
-      if STRIPE_SECRET_WEBHOOK_KEY == 'dev_webhook_key' :
+       if STRIPE_SECRET_WEBHOOK_KEY == 'dev_webhook_key' :
 						order.payment_successful = True
 						order.save()
 
 # The execution actually starts here
 if __name__ == '__main__':
 	print('Starting Rango population script...')
-	populate()
 	print('Populated...')
+	populate()
+
