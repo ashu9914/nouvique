@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import { mount, shallow } from 'enzyme';
 
-import { MediaListView, MediaListViewProps } from './MediaListView';
+import { BrowseView, BrowseViewProps } from './BrowseView';
 import { MemoryRouter as Router } from 'react-router';
 import { loadStripe } from '@stripe/stripe-js';
 
-describe('MediaListView', () => {
-	const getProps = (): MediaListViewProps => (
+describe('BrowseView', () => {
+	const getProps = (): BrowseViewProps => (
 		{
 			history: {} as any,
 			location: {} as any,
@@ -24,8 +24,8 @@ describe('MediaListView', () => {
 		}
 	)
 
-	const getComponent = (props: MediaListViewProps) => (
-		<MediaListView {...props} />
+	const getComponent = (props: BrowseViewProps) => (
+		<BrowseView {...props} />
 	);
 
 

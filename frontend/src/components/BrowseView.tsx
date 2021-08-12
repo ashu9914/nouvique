@@ -8,20 +8,16 @@ import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
-import './MediaView.css';
+import './BrowseView.css';
 
-interface MatchParams {
-	media_id: string
-}
-
-export interface MediaViewProps extends RouteComponentProps<MatchParams>, PageProps { }
+export interface BrowseViewProps extends RouteComponentProps, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export class MediaView extends React.Component<MediaViewProps, State> {
-	constructor(props: MediaViewProps) {
+export class BrowseView extends React.Component<BrowseViewProps, State> {
+	constructor(props: BrowseViewProps) {
 		super(props);
 
 		this.state = {
@@ -50,8 +46,8 @@ export class MediaView extends React.Component<MediaViewProps, State> {
 			<React.Fragment>
 				<BasePage {...this.props}>
 					<Row>
-						<h1>
-							Media: {this.props.match.params.media_id}
+						<h1 className="title" >
+							browse
 						</h1>
 					</Row>
 

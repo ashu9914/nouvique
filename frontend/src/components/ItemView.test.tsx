@@ -2,16 +2,16 @@ import * as React from 'react';
 
 import { mount, shallow } from 'enzyme';
 
-import { MediaView, MediaViewProps } from './MediaView';
+import { ItemView, ItemViewProps } from './ItemView';
 import { MemoryRouter as Router } from 'react-router';
 import { loadStripe } from '@stripe/stripe-js';
 
-describe('MediaView', () => {
-	const getProps = (): MediaViewProps => (
+describe('ItemView', () => {
+	const getProps = (): ItemViewProps => (
 		{
 			history: {} as any,
 			location: {} as any,
-			match: { params: { media_id: "foo" } as any } as any,
+			match: { params: { item_id: "foo" } as any } as any,
 			updateAlertBar: async () => { },
 			emptyBasket: () => { },
 			addToBasket: () => { },
@@ -24,8 +24,8 @@ describe('MediaView', () => {
 		}
 	)
 
-	const getComponent = (props: MediaViewProps) => (
-		<MediaView {...props} />
+	const getComponent = (props: ItemViewProps) => (
+		<ItemView {...props} />
 	);
 
 

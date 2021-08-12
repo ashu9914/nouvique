@@ -6,14 +6,15 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { HomeView } from './components/HomeView';
 import { LoginView } from './components/LoginView';
-import { MediaListView } from './components/MediaListView';
-import { MediaView } from './components/MediaView';
+import { BrowseView } from './components/BrowseView';
+import { ItemView } from './components/ItemView';
 import { ProfileView } from './components/ProfileView';
 import { CheckoutView } from './components/CheckoutView';
 import { RefreshOnboardingStripeView } from './components/RefreshOnboardingStripeView';
 import { RefreshUpdateStripeView } from './components/RefreshUpdateStripeView';
 import { VerifyProfileView } from './components/VerifyProfileView';
 import { SupportView } from './components/SupportView';
+import { EthicsView } from './components/EthicsView';
 
 import { AlertBarUpdater, BasketItem, ItemREST, ItemTypeAvailableREST, itemTypeAvailableRESTLink, ItemTypeREST, PageProps, resolveGETCall, Tokens } from './utils';
 import config from './config';
@@ -165,8 +166,8 @@ export default class App extends React.Component<Props, State> {
 					<Switch>
 						<Route exact path="/" render={(props) => <HomeView {...props} {...this.state} />} />
 						<Route exact path="/login" render={(props) => <LoginView {...props} {...this.state} />} />
-						<Route exact path="/media/" render={(props) => <MediaListView {...props} {...this.state} />} />
-						<Route exact path="/media/:media_id" render={(props) => <MediaView key={Date.now()} {...props} {...this.state} />} />
+						<Route exact path="/browse/" render={(props) => <BrowseView {...props} {...this.state} />} />
+						<Route exact path="/item/:item_id" render={(props) => <ItemView key={Date.now()} {...props} {...this.state} />} />
 
 						<Route path="/profile/:username" render={(props) => <ProfileView key={Date.now()} {...props} {...this.state} />} />
 						<Route path="/refresh_stripe_update_link/:username" render={(props) => <RefreshUpdateStripeView {...props} {...this.state} />} />
@@ -176,6 +177,8 @@ export default class App extends React.Component<Props, State> {
 						<Route path="/checkout" render={(props) => <CheckoutView {...props} {...this.state} />} />
 
 						<Route path="/support" render={(props) => <SupportView {...props} {...this.state} />} />
+
+						<Route path="/ethics" render={(props) => <EthicsView {...props} {...this.state} />} />
 					</Switch>
 				</Router>
 			</React.Fragment>

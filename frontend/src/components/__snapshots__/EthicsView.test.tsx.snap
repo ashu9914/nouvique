@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HomeView Should render correctly with mount 1`] = `
+exports[`EthicsView Should render correctly with mount 1`] = `
 "<MemoryRouter>
   <Router history={{...}}>
-    <HomeView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
+    <EthicsView history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
       <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
         <div className=\\"master\\">
           <img alt=\\"\\" src=\\"/logo_main.png\\" className=\\"logo\\" />
@@ -107,27 +107,6 @@ exports[`HomeView Should render correctly with mount 1`] = `
                 </h2>
               </div>
             </Row>
-            <Row className=\\"content\\">
-              <div className=\\"content row\\">
-                <Col>
-                  <div className=\\"col\\">
-                    <h1 className=\\"title\\">
-                      featured artists
-                    </h1>
-                  </div>
-                </Col>
-                <Col>
-                  <div className=\\"col\\">
-                    <h1 className=\\"title\\">
-                      featured pieces
-                    </h1>
-                  </div>
-                </Col>
-                <h1>
-                  Home
-                </h1>
-              </div>
-            </Row>
           </div>
         </div>
         <footer className=\\"footer py-3 text-black\\">
@@ -161,36 +140,19 @@ exports[`HomeView Should render correctly with mount 1`] = `
           </Container>
         </footer>
       </BasePage>
-    </HomeView>
+    </EthicsView>
   </Router>
 </MemoryRouter>"
 `;
 
-exports[`HomeView Should render correctly with shallow 1`] = `
-"<Fragment>
-  <BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
-    <Row>
-      <h2 className=\\"subtitle\\">
-        Connecting you to your community through art.
-        <br />
-        Local arists using sutainable methods, curated by us.
-      </h2>
-    </Row>
-    <Row className=\\"content\\">
-      <Col>
-        <h1 className=\\"title\\">
-          featured artists
-        </h1>
-      </Col>
-      <Col>
-        <h1 className=\\"title\\">
-          featured pieces
-        </h1>
-      </Col>
-      <h1>
-        Home
-      </h1>
-    </Row>
-  </BasePage>
-</Fragment>"
+exports[`EthicsView Should render correctly with shallow 1`] = `
+"<BasePage history={{...}} location={{...}} match={{...}} updateAlertBar={[Function: updateAlertBar]} emptyBasket={[Function: emptyBasket]} addToBasket={[Function: addToBasket]} removeFromBasket={[Function: removeFromBasket]} getBasketItems={[Function: getBasketItems]} getTotalBasketPrice={[Function: getTotalBasketPrice]} checkBasketAvailabilities={[Function: checkBasketAvailabilities]} stripePromise={{...}} alert={{...}}>
+  <Row>
+    <h2 className=\\"subtitle\\">
+      Connecting you to your community through art.
+      <br />
+      Local arists using sutainable methods, curated by us.
+    </h2>
+  </Row>
+</BasePage>"
 `;

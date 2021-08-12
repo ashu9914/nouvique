@@ -92,3 +92,28 @@
 	position: relative;
 	top: 1px;
 }
+
+.orders-offcanvas {
+	border: 0;
+}
+
+.orders-offcanvas.header {
+	background: rgb(250, 220, 189);
+}
+
+.orders-offcanvas.body {
+	background: rgb(240, 200, 129);
+}
+
+.orders-offcanvas.order {
+	margin: 0.25rem 0.25rem 0.25rem 0.25rem;
+	margin-bottom: 0.75rem;
+	border-radius: 0.75rem;
+	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	/* border: 1px solid darkgrey; */
+	background: rgb(250, 230, 209);
+} 
+
+.orders-offcanvas.order:last-of-type {
+	margin-bottom: 0.25rem;
+}

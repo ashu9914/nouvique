@@ -1,7 +1,59 @@
-.mainbody {
-	padding: 1rem 1rem 1rem 1rem;
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Open+Sans&family=Sanchez&family=Spartan:wght@900&display=swap');
+
+.master{
+	background-color:rgb(250, 240, 229);
 }
 
-.footer {
-	border-top: 1px solid lightgrey;
+.logo{
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+	width: 30rem;
+}
+
+.mainbody {
+	padding: 1rem 1rem 1rem 1rem;
+	min-height: calc(100vh - 256px);
+}
+
+.title{
+	font-family: 'Spartan', sans-serif;
+}
+
+.styled-btn.btn {
+	font-family: 'Nunito', sans-serif;
+	padding-top: 2px;
+	padding-botton: 2px;
+	border-radius: 0;
+	border-left: 1.5px black;
+	border-right: 0.55px black;
+	position: relative
+}
+
+.styled-btn.btn::before,
+.styled-btn.btn::after {
+  content:"";
+  background-color: black;
+  top: -4px;
+  bottom:-4px;
+  left: 2px;
+  position: absolute;
+  width: 1.5px;
+}
+
+.styled-btn.btn::after {
+  left: auto;
+  right: 2px;
+}
+
+.styled-btn.btn:hover {
+	background:rgb(232, 190, 144);
+}
+
+footer.footer {
+	/* border-top: 1px solid lightgrey; */
+	background: rgb(232, 190, 144);
+	bottom: 0;
+	position: relative;
+	width: 100%;
 }
