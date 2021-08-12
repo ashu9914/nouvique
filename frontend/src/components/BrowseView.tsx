@@ -8,16 +8,16 @@ import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
-import './MediaListView.css';
+import './BrowseView.css';
 
-export interface MediaListViewProps extends RouteComponentProps, PageProps { }
+export interface BrowseViewProps extends RouteComponentProps, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export class MediaListView extends React.Component<MediaListViewProps, State> {
-	constructor(props: MediaListViewProps) {
+export class BrowseView extends React.Component<BrowseViewProps, State> {
+	constructor(props: BrowseViewProps) {
 		super(props);
 
 		this.state = {

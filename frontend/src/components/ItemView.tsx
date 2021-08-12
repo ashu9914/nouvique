@@ -8,20 +8,20 @@ import { ApiTest, apiTestLink, PageProps, resolveGETCall } from '../utils';
 
 import BasePage from './elements/BasePage';
 
-import './MediaView.css';
+import './ItemView.css';
 
 interface MatchParams {
-	media_id: string
+	item_id: string
 }
 
-export interface MediaViewProps extends RouteComponentProps<MatchParams>, PageProps { }
+export interface ItemViewProps extends RouteComponentProps<MatchParams>, PageProps { }
 
 interface State {
 	apiValue: ApiTest
 }
 
-export class MediaView extends React.Component<MediaViewProps, State> {
-	constructor(props: MediaViewProps) {
+export class ItemView extends React.Component<ItemViewProps, State> {
+	constructor(props: ItemViewProps) {
 		super(props);
 
 		this.state = {
@@ -51,7 +51,7 @@ export class MediaView extends React.Component<MediaViewProps, State> {
 				<BasePage {...this.props}>
 					<Row>
 						<h1>
-							Media: {this.props.match.params.media_id}
+							Item: {this.props.match.params.item_id}
 						</h1>
 					</Row>
 
