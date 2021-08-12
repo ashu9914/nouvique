@@ -256,10 +256,10 @@ def populate():
 
 		user.save()
 
-	for i in items : #for items
-		seller = User.objects.all(username=i['seller'])
+   for i in items : #for items
+	seller = User.objects.all(username=i['seller'])
   
-    seller.save()
+        seller.save()
   
    for t in item_types:
       item_type = ItemType.objects.get(id=req_item["type_id"])
